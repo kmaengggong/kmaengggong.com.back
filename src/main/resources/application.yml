@@ -1,0 +1,15 @@
+spring:
+    application:
+        name: kmaengggong
+    datasource:
+        url: jdbc:mysql://127.0.0.1:3306/kmaengggong_dev?serverTimezone=Asia/Seoul
+        username: root
+        password: root
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                format_sql: true
+        show-sql: true
