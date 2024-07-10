@@ -1,0 +1,11 @@
+# main
+1. Member service + test
+2. Member controller + test
+3. Article 생성
+
+# later
+1. 클라우드 DB 연결
+2. 배포
+
+# sub
+1. application.yml 암호화
