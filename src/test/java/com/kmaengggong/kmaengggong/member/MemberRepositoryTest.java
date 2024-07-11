@@ -1,5 +1,7 @@
 package com.kmaengggong.kmaengggong.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -8,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -68,6 +70,33 @@ public class MemberRepositoryTest {
         // Then
         assertThat(memberList).isNotNull();
         assertThat(memberList.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("R: findAllPage")
+    void findAllPageTest() {
+        // Given
+        String email1 = "email1@email1.com";
+        String password1 = "password1";
+        String nickname1 = "nickname1";
+        Member member1 = Member.builder()
+            .email(email1)
+            .password(password1)
+            .nickname(nickname1)
+            .build();
+        
+        memberRepository.save(member);
+        memberRepository.save(member1);
+
+        // When
+        Page<Member> memberPage = memberRepository.findAll(PageRequest.of(0, 10));
+
+        // Then
+        assertThat(memberPage).isNotNull();
+        assertThat(memberPage.getTotalElements()).isEqualTo(2);
+        assertThat(memberPage.getTotalPages()).isEqualTo(1);
+        assertThat(memberPage.getSize()).isEqualTo(10);
+        assertThat(memberPage.getContent()).hasSize(2);
     }
 
     @Test

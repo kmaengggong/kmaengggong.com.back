@@ -2,23 +2,30 @@ package com.kmaengggong.kmaengggong.member.application;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.kmaengggong.kmaengggong.member.domain.Member;
-import com.kmaengggong.kmaengggong.member.interfaces.dto.MemberFindDTO;
+import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
+import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
+import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
+import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
 
 @Service
 public interface MemberService {
-    Member save(Member member);
+    MemberFindDTO save(MemberSaveDTO memberSaveDTO);
 
-    List<Member> findAll();
+    List<MemberFindDTO> findAll();
+    Page<MemberFindDTO> findAll(Pageable pageable);
     MemberFindDTO findById(Long memberId);
-    Member findByEmail(String email);
-    Member findByNickname(String nickname);
+    MemberFindDTO findByEmail(String email);
+    MemberFindDTO findByNickname(String nickname);
 
-    void update(Member member);
+    void update(MemberUpdateDTO memberUpdateDTO);
 
-    void updatePassword(Member member);
+    void updatePassword(MemberUpdatePasswordDTO MemberUpdatePasswordDTO);
 
-    void deleteById(Long memeberId);
+    void deleteById(Long memberId);
+
+    boolean passwordCheck(Long memberId, String password);
 }

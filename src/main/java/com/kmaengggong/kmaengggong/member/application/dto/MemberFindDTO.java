@@ -1,15 +1,20 @@
-package com.kmaengggong.kmaengggong.member.interfaces.dto;
+package com.kmaengggong.kmaengggong.member.application.dto;
 
 import java.time.LocalDateTime;
 
 import com.kmaengggong.kmaengggong.member.domain.Member;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberFindDTO {
     private Long memberId;
     private String email;
