@@ -1,27 +1,29 @@
 package com.kmaengggong.kmaengggong.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import com.kmaengggong.kmaengggong.member.application.MemberService;
 import com.kmaengggong.kmaengggong.member.domain.Member;
-import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
+import com.kmaengggong.kmaengggong.member.interfaces.dto.MemberFindDTO;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import jakarta.transaction.Transactional;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class MemberRepositoryTest {
+@SpringBootTest
+@Transactional
+public class MemberServiceTest {
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     private Member member;
-
+    
     private String email = "email@email.com";
     private String password = "password";
     private String nickname = "nickname";
@@ -39,7 +41,7 @@ public class MemberRepositoryTest {
     @DisplayName("C: save")
     void saveTest() {
         // When
-        Member savedMember = memberRepository.save(member);
+        Member savedMember = memberService.save(member);
 
         // Then
         assertThat(savedMember).isNotNull();
@@ -48,7 +50,7 @@ public class MemberRepositoryTest {
 
     @Test
     @DisplayName("R: findAll")
-    void findByAllTest() {
+    void findAllTest() {
         // Given
         String email1 = "email1@email1.com";
         String password1 = "password1";
@@ -58,12 +60,12 @@ public class MemberRepositoryTest {
             .password(password1)
             .nickname(nickname1)
             .build();
-        
-        memberRepository.save(member);
-        memberRepository.save(member1);
+
+        memberService.save(member);
+        memberService.save(member1);
 
         // When
-        List<Member> memberList = memberRepository.findAll();
+        List<Member> memberList = memberService.findAll();
 
         // Then
         assertThat(memberList).isNotNull();
@@ -74,28 +76,26 @@ public class MemberRepositoryTest {
     @DisplayName("R: findById")
     void findByIdTest() {
         // Given
-        memberRepository.save(member);
+        memberService.save(member);
 
         // When
-        Member findMember = memberRepository.findById(member.getMemberId()).orElse(null);
+        MemberFindDTO findMember = memberService.findById(member.getMemberId());
 
         // Then
         assertThat(findMember).isNotNull();
         assertThat(findMember.getMemberId()).isEqualTo(member.getMemberId());
         assertThat(findMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(findMember.getPassword()).isEqualTo(member.getPassword());
         assertThat(findMember.getNickname()).isEqualTo(member.getNickname());
     }
 
-    // findByEmail
     @Test
     @DisplayName("R: findByEmail")
     void findByEmailTest() {
         // Given
-        memberRepository.save(member);
+        memberService.save(member);
 
         // When
-        Member findMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
+        Member findMember = memberService.findByEmail(member.getEmail());
 
         // Then
         assertThat(findMember).isNotNull();
@@ -105,15 +105,14 @@ public class MemberRepositoryTest {
         assertThat(findMember.getNickname()).isEqualTo(member.getNickname());
     }
 
-    // findByNickname
     @Test
     @DisplayName("R: findByNickname")
     void findByNicknameTest() {
         // Given
-        memberRepository.save(member);
+        memberService.save(member);
 
         // When
-        Member findMember = memberRepository.findByNickname(member.getNickname()).orElse(null);
+        Member findMember = memberService.findByNickname(member.getNickname());
 
         // Then
         assertThat(findMember).isNotNull();
@@ -128,15 +127,16 @@ public class MemberRepositoryTest {
     void updateTest() {
         // Given
         String updateNickname = "updateNickname";
-        memberRepository.save(member);
+        memberService.save(member);
 
         // When
-        Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
+        MemberFindDTO savedMemberFindDTO = memberService.findById(member.getMemberId());
+        Member savedMember = MemberFindDTO.toEntity(savedMemberFindDTO);
         assertThat(savedMember).isNotNull();
 
         savedMember.update(updateNickname);
 
-        Member updatedMember = memberRepository.save(savedMember);
+        Member updatedMember = memberService.save(savedMember);
 
         // Then
         assertThat(updatedMember).isNotNull();
@@ -144,19 +144,20 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("U: updatePassword")
+    @DisplayName("U: updatedPassword")
     void updatePasswordTest() {
         // Given
         String updatePassword = "updatePassword";
-        memberRepository.save(member);
+        memberService.save(member);
 
         // When
-        Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
+        MemberFindDTO savedMemberFindDTO = memberService.findById(member.getMemberId());
+        Member savedMember = MemberFindDTO.toEntity(savedMemberFindDTO);
         assertThat(savedMember).isNotNull();
 
         savedMember.updatePassword(updatePassword);
 
-        Member updatedMember = memberRepository.save(savedMember);
+        Member updatedMember = memberService.save(savedMember);
 
         // Then
         assertThat(updatedMember).isNotNull();
@@ -167,11 +168,13 @@ public class MemberRepositoryTest {
     @DisplayName("D: deleteById")
     void deleteByIdTest() {
         // Given
-        memberRepository.save(member);
+        memberService.save(member);
 
         // When
-        memberRepository.deleteById(member.getMemberId());
-        Member deletedMember = memberRepository.findById(member.getMemberId()).orElse(null);
+        memberService.deleteById(member.getMemberId());
+        
+        MemberFindDTO deletedMemberFindDTO = memberService.findById(member.getMemberId());
+        Member deletedMember = MemberFindDTO.toEntity(deletedMemberFindDTO);
 
         // Then
         assertThat(deletedMember).isNull();
