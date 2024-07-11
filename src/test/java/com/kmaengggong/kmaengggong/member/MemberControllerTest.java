@@ -149,13 +149,11 @@ public class MemberControllerTest {
         String uri = result.getResponse().getHeader("Location");
 
         MemberRequest memberRequestUpdate = MemberRequest.builder()
-            .email("Tlqkf")
-            .password("wlfkfdldi")
             .nickname(updateNickname)
             .build();
         String memberRequestJsonUpdate = objectMapper.writeValueAsString(memberRequestUpdate);
 
-        mockMvc.perform(patch(uri)
+        mockMvc.perform(post(uri)
             .contentType(MediaType.APPLICATION_JSON)
             .content(memberRequestJsonUpdate))
             .andExpect(status().isNoContent());

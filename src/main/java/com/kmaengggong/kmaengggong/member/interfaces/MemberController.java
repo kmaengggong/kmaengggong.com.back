@@ -66,7 +66,7 @@ public class MemberController {
         return ResponseEntity.ok(memberResponse);
     }
 
-    @PatchMapping("/{memberId}")
+    @PostMapping("/{memberId}")
     public ResponseEntity<Void> update(
         @PathVariable("memberId") Long memberId,
         @RequestBody MemberRequest memberRequest
