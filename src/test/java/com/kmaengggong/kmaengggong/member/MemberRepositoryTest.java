@@ -106,14 +106,14 @@ public class MemberRepositoryTest {
         memberRepository.save(member);
 
         // When
-        Member findMember = memberRepository.findById(member.getMemberId()).orElse(null);
+        Member foundMember = memberRepository.findById(member.getMemberId()).orElse(null);
 
         // Then
-        assertThat(findMember).isNotNull();
-        assertThat(findMember.getMemberId()).isEqualTo(member.getMemberId());
-        assertThat(findMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(findMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(findMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(foundMember).isNotNull();
+        assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
+        assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
+        assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
+        assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
     }
 
     // findByEmail
@@ -124,14 +124,14 @@ public class MemberRepositoryTest {
         memberRepository.save(member);
 
         // When
-        Member findMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
+        Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
 
         // Then
-        assertThat(findMember).isNotNull();
-        assertThat(findMember.getMemberId()).isEqualTo(member.getMemberId());
-        assertThat(findMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(findMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(findMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(foundMember).isNotNull();
+        assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
+        assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
+        assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
+        assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
     }
 
     // findByNickname
@@ -142,14 +142,14 @@ public class MemberRepositoryTest {
         memberRepository.save(member);
 
         // When
-        Member findMember = memberRepository.findByNickname(member.getNickname()).orElse(null);
+        Member foundMember = memberRepository.findByNickname(member.getNickname()).orElse(null);
 
         // Then
-        assertThat(findMember).isNotNull();
-        assertThat(findMember.getMemberId()).isEqualTo(member.getMemberId());
-        assertThat(findMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(findMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(findMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(foundMember).isNotNull();
+        assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
+        assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
+        assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
+        assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
     }
 
     @Test

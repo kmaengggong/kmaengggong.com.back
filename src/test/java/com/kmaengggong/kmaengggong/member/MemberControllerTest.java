@@ -268,8 +268,8 @@ public class MemberControllerTest {
 
     @Test
     @Transactional
-    @DisplayName("U: updateTestNotExits")
-    void updateTestNotExitsTest() throws Exception {
+    @DisplayName("U: updateNotExits")
+    void updateNotExitsTest() throws Exception {
         // Given
         String updateNickname = "updateNickname";
         String uri = "/member/9999";
@@ -289,8 +289,40 @@ public class MemberControllerTest {
 
     @Test
     @Transactional
-    @DisplayName("D: delete")
-    void deleteTest() throws Exception {
+    @DisplayName("U: updateNullValue")
+    void updateNullValue() throws Exception {
+        // Given
+        String updateNickname = null;
+        String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
+
+        // When
+        MvcResult result = mockMvc.perform(post("/member")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJson))
+            .andExpect(status().isCreated())
+            .andReturn();
+        String uri = result.getResponse().getHeader("Location");
+
+        MemberRequest memberRequestUpdate = MemberRequest.builder()
+            .nickname(updateNickname)
+            .build();
+        String memberRequestJsonUpdate = objectMapper.writeValueAsString(memberRequestUpdate);
+
+        mockMvc.perform(patch(uri)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJsonUpdate))
+            .andExpect(status().isNoContent());
+
+        // Then
+        mockMvc.perform(get(uri))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.nickname").value(nickname));   
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("D: deleteById")
+    void deleteByIdTest() throws Exception {
         // Given
         String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
 
@@ -309,8 +341,8 @@ public class MemberControllerTest {
 
     @Test
     @Transactional
-    @DisplayName("D: deleteNotExists")
-    void deleteNotExistsTest() throws Exception {
+    @DisplayName("D: deleteByIdNotExists")
+    void deleteByIdNotExistsTest() throws Exception {
         // Given
         String uri = "/member/9999";
 

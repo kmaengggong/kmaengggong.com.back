@@ -40,10 +40,10 @@ public class Member {
     }
 
     public void update(String nickname) {
-        this.nickname = nickname;
+        if(nickname != null) this.nickname = nickname;
     }
 
     public void updatePassword(String password) {
-        this.password = password;
+        if(password != null) this.password = password;
     }
 }

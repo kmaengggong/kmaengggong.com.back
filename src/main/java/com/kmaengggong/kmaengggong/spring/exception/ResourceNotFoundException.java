@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.member.application.exception;
+package com.kmaengggong.kmaengggong.spring.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

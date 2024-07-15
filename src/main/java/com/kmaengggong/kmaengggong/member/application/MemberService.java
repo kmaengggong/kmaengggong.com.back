@@ -22,7 +22,6 @@ public interface MemberService {
     MemberFindDTO findByNickname(String nickname);
 
     void update(MemberUpdateDTO memberUpdateDTO);
-
     void updatePassword(MemberUpdatePasswordDTO MemberUpdatePasswordDTO);
 
     void deleteById(Long memberId);

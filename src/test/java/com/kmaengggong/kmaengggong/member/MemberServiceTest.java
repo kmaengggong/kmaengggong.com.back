@@ -18,7 +18,7 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
-import com.kmaengggong.kmaengggong.member.application.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -28,7 +28,6 @@ public class MemberServiceTest {
     @Autowired
     private MemberService memberService;
 
-    // private Member member;
     private MemberFindDTO memberFindDTO;
     private MemberSaveDTO memberSaveDTO;
     
@@ -213,6 +212,7 @@ public class MemberServiceTest {
         memberService.deleteById(memberFindDTO.getMemberId());
         
         // Then
-        assertThrows(ResourceNotFoundException.class, () -> memberService.findById(memberFindDTO.getMemberId()));
+        assertThrows(ResourceNotFoundException.class,
+            () -> memberService.findById(memberFindDTO.getMemberId()));
     }
 }

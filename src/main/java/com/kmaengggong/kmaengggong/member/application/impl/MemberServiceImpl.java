@@ -14,9 +14,9 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
-import com.kmaengggong.kmaengggong.member.application.exception.ResourceNotFoundException;
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
+import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -60,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
                 pageable.getSort()
             ));
         }
-        
+
         List<MemberFindDTO> memberFindDTOList = memberPage.getContent().stream()
             .map(MemberFindDTO::toDTO)
             .collect(Collectors.toList());
