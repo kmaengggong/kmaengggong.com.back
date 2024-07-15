@@ -2,6 +2,7 @@ package com.kmaengggong.kmaengggong.member.interfaces;
 
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
+import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,12 @@ public class MemberRequest {
     public static MemberUpdateDTO toUpdateDto(MemberRequest memberRequest) {
         return MemberUpdateDTO.builder()
             .nickname(memberRequest.getNickname())
+            .build();
+    }
+
+    public static MemberUpdatePasswordDTO toUpdatePasswordDto(MemberRequest memberRequest) {
+        return MemberUpdatePasswordDTO.builder()
+            .password(memberRequest.getPassword())
             .build();
     }
 }

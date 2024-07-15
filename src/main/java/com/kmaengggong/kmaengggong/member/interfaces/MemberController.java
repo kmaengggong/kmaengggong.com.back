@@ -24,6 +24,7 @@ import com.kmaengggong.kmaengggong.member.application.MemberService;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
+import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
 import com.kmaengggong.kmaengggong.member.application.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -36,11 +37,8 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody MemberRequest memberRequest, UriComponentsBuilder ucb) {
-        System.out.println(memberRequest);
         MemberSaveDTO memberSaveDTO = MemberRequest.toSaveDto(memberRequest);
-        System.out.println(memberSaveDTO);
         MemberFindDTO memberFindDTO = memberService.save(memberSaveDTO);
-        System.out.println(memberFindDTO);
         URI uri = ucb
             .path("member/{memberId}")
             .buildAndExpand(memberFindDTO.getMemberId())
@@ -66,14 +64,19 @@ public class MemberController {
         return ResponseEntity.ok(memberResponse);
     }
 
-    @PostMapping("/{memberId}")
-    public ResponseEntity<Void> update(
-        @PathVariable("memberId") Long memberId,
-        @RequestBody MemberRequest memberRequest
-    ) {
-
+    @PatchMapping("/{memberId}")
+    public ResponseEntity<Void> update(@PathVariable("memberId") Long memberId, @RequestBody MemberRequest memberRequest) {
         MemberUpdateDTO memberUpdateDTO = MemberRequest.toUpdateDto(memberRequest);
+        memberUpdateDTO.setMemberId(memberId);
         memberService.update(memberUpdateDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{memberId}/password")
+    public ResponseEntity<Void> updatePassword(@PathVariable("memberId") Long memberId, @RequestBody MemberRequest memberRequest) {
+        MemberUpdatePasswordDTO memberUpdatePasswordDTO = MemberRequest.toUpdatePasswordDto(memberRequest);
+        memberUpdatePasswordDTO.setMemberId(memberId);
+        memberService.updatePassword(memberUpdatePasswordDTO);
         return ResponseEntity.noContent().build();
     }
 

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,25 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Page<MemberFindDTO> findAll(Pageable pageable) {
-        Page<Member> memberPage = memberRepository.findAll(pageable);
+        // 0 이하의 페이지 -> 0으로
+        int pageNumber = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber();
+        // 조회
+        Page<Member> memberPage = memberRepository.findAll(PageRequest.of(
+            pageNumber,
+            pageable.getPageSize(),
+            pageable.getSort()
+        ));
+        // 0페이지보다 큰데 비어있다면, 그 전의 마지막 페이지로 다시 조회
+        if(memberPage.isEmpty() && pageNumber > 0){
+            int lastPage = memberPage.getTotalPages() - 1;
+            pageNumber = lastPage > 0 ? lastPage : 0;
+            memberPage = memberRepository.findAll(PageRequest.of(
+                pageNumber,
+                pageable.getPageSize(),
+                pageable.getSort()
+            ));
+        }
+        
         List<MemberFindDTO> memberFindDTOList = memberPage.getContent().stream()
             .map(MemberFindDTO::toDTO)
             .collect(Collectors.toList());

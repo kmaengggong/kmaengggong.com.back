@@ -75,11 +75,9 @@ public class MemberControllerTest {
             .andExpect(jsonPath("$.nickname").value(nickname));
     }
 
-    // TODO: @DisplayName("C: saveAlreadyExits")
-
     @Test
     @Transactional
-    @DisplayName("R: findAllPageTest")
+    @DisplayName("R: findAllPage")
     void findAllPageTest() throws Exception {
         // Given
         String email1 = "email1@email1.com";
@@ -122,15 +120,87 @@ public class MemberControllerTest {
     }
 
     @Test
+    @Transactional
+    @DisplayName("R: findAllSortedPage")
+    void findAllSortedPageTest() throws Exception {
+        // Given
+        String email1 = "email1@email1.com";
+        String password1 = "password1";
+        String nickname1 = "nickname1";
+        MemberRequest memberRequest1 = MemberRequest.builder()
+            .email(email1)
+            .password(password1)
+            .nickname(nickname1)
+            .build();
+
+        String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
+        String memberRequestJson1 = objectMapper.writeValueAsString(memberRequest1);
+
+        // When
+        mockMvc.perform(post("/member")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJson))
+            .andExpect(status().isCreated());
+        mockMvc.perform(post("/member")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJson1))
+            .andExpect(status().isCreated());
+
+        String responseJson = mockMvc.perform(get("/member?sort=registeredAt,desc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(2))
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        List<String> expectedEmails = Arrays.asList(email1, email);
+        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
+        List<String> expectedNicknames = Arrays.asList(nickname1, nickname);
+        List<String> jsonNicknames = JsonPath.parse(responseJson).read("$..nickname");
+
+        // Then
+        assertThat(jsonEmails).containsExactlyInAnyOrderElementsOf(expectedEmails);
+        assertThat(jsonNicknames).containsExactlyInAnyOrderElementsOf(expectedNicknames);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("R: findAllNotExistsPage")
+    void findAllNotExistsPageTest() throws Exception {
+        // Given
+        String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
+
+        // When
+        mockMvc.perform(post("/member")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJson))
+            .andExpect(status().isCreated());
+        
+        // Then
+        String responseJson = mockMvc.perform(get("/member?page=9999&size=1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(1))
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        List<String> expectedEmails = Arrays.asList(email);
+        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
+        List<String> expectedNicknames = Arrays.asList(nickname);
+        List<String> jsonNicknames = JsonPath.parse(responseJson).read("$..nickname");
+
+        // Then
+        assertThat(jsonEmails).containsExactlyInAnyOrderElementsOf(expectedEmails);
+        assertThat(jsonNicknames).containsExactlyInAnyOrderElementsOf(expectedNicknames);
+    }
+
+    @Test
     @DisplayName("R: findByIdNotExists")
     void findByIdNoContentTest() throws Exception {
         // Then
-        mockMvc.perform(get("/member/1"))
+        mockMvc.perform(get("/member/9999"))
             .andExpect(status().isNotFound());
     }
-
-    // TODO: sorting
-    // TODO: authorization
 
     @Test
     @Transactional
@@ -153,7 +223,7 @@ public class MemberControllerTest {
             .build();
         String memberRequestJsonUpdate = objectMapper.writeValueAsString(memberRequestUpdate);
 
-        mockMvc.perform(post(uri)
+        mockMvc.perform(patch(uri)
             .contentType(MediaType.APPLICATION_JSON)
             .content(memberRequestJsonUpdate))
             .andExpect(status().isNoContent());
@@ -165,26 +235,87 @@ public class MemberControllerTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("U: updatePassword")
     void updatePasswordTest() throws Exception {
+        // Given
+        String updatePassword = "updatePassword";
+        String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
 
+        // When
+        MvcResult result = mockMvc.perform(post("/member")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJson))
+            .andExpect(status().isCreated())
+            .andReturn();
+        String uri = result.getResponse().getHeader("Location");
+        String updatePasswordUri = uri + "/password";  // ex) /member/1 -> /member/1/password
+
+        MemberRequest memberRequestUpdate = MemberRequest.builder()
+            .password(updatePassword)
+            .build();
+        String memberRequestJsonUpdate = objectMapper.writeValueAsString(memberRequestUpdate);
+
+        mockMvc.perform(patch(updatePasswordUri)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJsonUpdate))
+            .andExpect(status().isNoContent());
+
+        // Then
+        mockMvc.perform(get(uri))
+            .andExpect(status().isOk());
     }
 
     @Test
+    @Transactional
     @DisplayName("U: updateTestNotExits")
     void updateTestNotExitsTest() throws Exception {
+        // Given
+        String updateNickname = "updateNickname";
+        String uri = "/member/9999";
 
+        // When
+        MemberRequest memberRequestUpdate = MemberRequest.builder()
+            .nickname(updateNickname)
+            .build();
+        String memberRequestJsonUpdate = objectMapper.writeValueAsString(memberRequestUpdate);
+
+        // Then
+        mockMvc.perform(patch(uri)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJsonUpdate))
+            .andExpect(status().isNotFound());
     }
 
     @Test
+    @Transactional
     @DisplayName("D: delete")
     void deleteTest() throws Exception {
+        // Given
+        String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
 
+        // When
+        MvcResult result = mockMvc.perform(post("/member")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(memberRequestJson))
+            .andExpect(status().isCreated())
+            .andReturn();
+        String uri = result.getResponse().getHeader("Location");
+
+        // Then
+        mockMvc.perform(delete(uri))
+            .andExpect(status().isNoContent());
     }
 
     @Test
+    @Transactional
     @DisplayName("D: deleteNotExists")
     void deleteNotExistsTest() throws Exception {
+        // Given
+        String uri = "/member/9999";
 
+        // Then
+        mockMvc.perform(delete(uri))
+            .andExpect(status().isNotFound());
     }
 }
