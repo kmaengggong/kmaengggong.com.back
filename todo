@@ -1,7 +1,8 @@
 # main
-1. Member service + test
-2. Member controller + test
-3. Article 생성
+1. Article 생성
+2. Member return 시 비밀번호 빼고 리턴하도록
+    -> 비밀번호 리턴이 필요한 경우가 없다고 가정.
+    -> 비밀번호 확인은 서버에서. 다시 클라이언트로 돌려줄 필요가 없음.
 
 # later
 1. 클라우드 DB 연결

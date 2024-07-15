@@ -1,8 +1,8 @@
-package com.kmaengggong.kmaengggong.article.application.dto;
+package com.kmaengggong.kmaengggong.board.interfaces;
 
 import java.time.LocalDateTime;
 
-import com.kmaengggong.kmaengggong.article.domain.Article;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleFindDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleFindDTO {
+public class ArticleResponse {
     private Long articleId;
     private Long authorId;
     private String title;
@@ -24,20 +24,8 @@ public class ArticleFindDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static ArticleFindDTO toDTO(Article article) {
-        return ArticleFindDTO.builder()
-            .articleId(article.getArticleId())
-            .authorId(article.getAuthorId())
-            .title(article.getTitle())
-            .content(article.getContent())
-            .headerImage(article.getHeaderImage())
-            .createdAt(article.getCreatedAt())
-            .updatedAt(article.getUpdatedAt())
-            .build();
-    }
-
-    public static Article toEntity(ArticleFindDTO articleFindDTO) {
-        return Article.builder()
+    public static ArticleResponse toResponse(ArticleFindDTO articleFindDTO) {
+        return ArticleResponse.builder()
             .articleId(articleFindDTO.getArticleId())
             .authorId(articleFindDTO.getAuthorId())
             .title(articleFindDTO.getTitle())

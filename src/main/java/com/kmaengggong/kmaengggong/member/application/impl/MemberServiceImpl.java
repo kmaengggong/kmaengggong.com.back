@@ -16,7 +16,10 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
-import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
+
+import jakarta.transaction.Transactional;
+
+import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
+    @Transactional
     public MemberFindDTO save(MemberSaveDTO memberSaveDTO) {
         Member member = MemberSaveDTO.toEntity(memberSaveDTO);
         member = memberRepository.save(member);
@@ -34,8 +38,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberFindDTO> findAll() {
-        List<Member> memberList = memberRepository.findAll();
-        return memberList.stream()
+        List<Member> members = memberRepository.findAll();
+        return members.stream()
             .map(MemberFindDTO::toDTO)
             .collect(Collectors.toList());
     }
@@ -61,10 +65,10 @@ public class MemberServiceImpl implements MemberService {
             ));
         }
 
-        List<MemberFindDTO> memberFindDTOList = memberPage.getContent().stream()
+        List<MemberFindDTO> memberFindDTOs = memberPage.getContent().stream()
             .map(MemberFindDTO::toDTO)
             .collect(Collectors.toList());
-        return new PageImpl<>(memberFindDTOList, pageable, memberPage.getTotalElements());
+        return new PageImpl<>(memberFindDTOs, pageable, memberPage.getTotalElements());
     }
 
     @Override
@@ -89,6 +93,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void update(MemberUpdateDTO memberUpdateDTO) {
         Member member = memberRepository.findById(memberUpdateDTO.getMemberId())
             .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
@@ -97,6 +102,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updatePassword(MemberUpdatePasswordDTO memberUpdatePasswordDTO) {
         Member member = memberRepository.findById(memberUpdatePasswordDTO.getMemberId())
             .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
@@ -105,6 +111,7 @@ public class MemberServiceImpl implements MemberService {
     }
     
     @Override
+    @Transactional
     public void deleteById(Long memberId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new ResourceNotFoundException("Member not found"));

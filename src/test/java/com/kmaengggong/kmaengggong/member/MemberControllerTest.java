@@ -56,7 +56,7 @@ public class MemberControllerTest {
     @Test
     @Transactional
     @DisplayName("CR: saveAndFindById")
-    void saveAndfindByIdTest() throws Exception {
+    void saveAndFindByIdTest() throws Exception {
         // Given
         String memberRequestJson = objectMapper.writeValueAsString(memberRequest);
 
@@ -110,8 +110,8 @@ public class MemberControllerTest {
             .getContentAsString();
 
         List<String> expectedEmails = Arrays.asList(email, email1);
-        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
         List<String> expectedNicknames = Arrays.asList(nickname, nickname1);
+        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
         List<String> jsonNicknames = JsonPath.parse(responseJson).read("$..nickname");
 
         // Then
@@ -154,8 +154,8 @@ public class MemberControllerTest {
             .getContentAsString();
 
         List<String> expectedEmails = Arrays.asList(email1, email);
-        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
         List<String> expectedNicknames = Arrays.asList(nickname1, nickname);
+        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
         List<String> jsonNicknames = JsonPath.parse(responseJson).read("$..nickname");
 
         // Then
@@ -185,8 +185,8 @@ public class MemberControllerTest {
             .getContentAsString();
 
         List<String> expectedEmails = Arrays.asList(email);
-        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
         List<String> expectedNicknames = Arrays.asList(nickname);
+        List<String> jsonEmails = JsonPath.parse(responseJson).read("$..email");
         List<String> jsonNicknames = JsonPath.parse(responseJson).read("$..nickname");
 
         // Then
@@ -196,7 +196,7 @@ public class MemberControllerTest {
 
     @Test
     @DisplayName("R: findByIdNotExists")
-    void findByIdNoContentTest() throws Exception {
+    void findByIdNotExistsTest() throws Exception {
         // Then
         mockMvc.perform(get("/member/9999"))
             .andExpect(status().isNotFound());
@@ -334,9 +334,12 @@ public class MemberControllerTest {
             .andReturn();
         String uri = result.getResponse().getHeader("Location");
 
-        // Then
         mockMvc.perform(delete(uri))
             .andExpect(status().isNoContent());
+
+        // Then
+        mockMvc.perform(get(uri))
+            .andExpect(status().isNotFound());
     }
 
     @Test

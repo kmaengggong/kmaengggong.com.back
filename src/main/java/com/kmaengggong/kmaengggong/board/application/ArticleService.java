@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.article.application;
+package com.kmaengggong.kmaengggong.board.application;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleFindDTO;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleSaveDTO;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleUpdateDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleFindDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleSaveDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;
 
 @Service
 public interface ArticleService {

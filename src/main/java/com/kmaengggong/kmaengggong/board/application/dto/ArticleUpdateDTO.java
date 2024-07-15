@@ -1,6 +1,6 @@
-package com.kmaengggong.kmaengggong.article.application.dto;
+package com.kmaengggong.kmaengggong.board.application.dto;
 
-import com.kmaengggong.kmaengggong.article.domain.Article;
+import com.kmaengggong.kmaengggong.board.domain.Article;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

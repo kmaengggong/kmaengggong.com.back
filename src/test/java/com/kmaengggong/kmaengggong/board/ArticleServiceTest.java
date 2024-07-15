@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.article;
+package com.kmaengggong.kmaengggong.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,11 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import com.kmaengggong.kmaengggong.article.application.ArticleService;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleFindDTO;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleSaveDTO;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleUpdateDTO;
-import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.board.application.ArticleService;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleFindDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleSaveDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;
+import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 

@@ -7,10 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +23,14 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
-import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
-public class MemberController {
+public class MemberController extends CommonController {
     private final MemberService memberService;
 
     @PostMapping
@@ -49,18 +47,18 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<List<MemberResponse>> findAll(Pageable pageable) {
         Page<MemberFindDTO> memberPage = memberService.findAll(pageable);
-        List<MemberResponse> memberRseponseList = memberPage.getContent().stream()
+        List<MemberResponse> memberRseponses = memberPage.getContent().stream()
             .map(MemberResponse::toResponse)
             .collect(Collectors.toList());
         Page<MemberResponse> memberResponsePage = new PageImpl<>(
-            memberRseponseList, pageable, memberPage.getTotalElements());
+            memberRseponses, pageable, memberPage.getTotalElements());
         return ResponseEntity.ok(memberResponsePage.getContent());
     }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponse> findById(@PathVariable("memberId") Long memberId) {
-        MemberFindDTO MemberFindDTO = memberService.findById(memberId);
-        MemberResponse memberResponse = MemberResponse.toResponse(MemberFindDTO);
+        MemberFindDTO memberFindDTO = memberService.findById(memberId);
+        MemberResponse memberResponse = MemberResponse.toResponse(memberFindDTO);
         return ResponseEntity.ok(memberResponse);
     }
 
@@ -84,10 +82,5 @@ public class MemberController {
     public ResponseEntity<Void> deleteById(@PathVariable("memberId") Long memberId) {
         memberService.deleteById(memberId);
         return ResponseEntity.noContent().build();
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }

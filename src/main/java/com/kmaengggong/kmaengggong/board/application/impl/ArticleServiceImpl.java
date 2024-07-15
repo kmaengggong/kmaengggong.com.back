@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.article.application.impl;
+package com.kmaengggong.kmaengggong.board.application.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,14 +9,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.kmaengggong.kmaengggong.article.application.ArticleService;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleFindDTO;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleSaveDTO;
-import com.kmaengggong.kmaengggong.article.application.dto.ArticleUpdateDTO;
-import com.kmaengggong.kmaengggong.article.domain.Article;
-import com.kmaengggong.kmaengggong.article.domain.ArticleRepository;
-import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.board.application.ArticleService;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleFindDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleSaveDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;
+import com.kmaengggong.kmaengggong.board.domain.Article;
+import com.kmaengggong.kmaengggong.board.domain.ArticleRepository;
+import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,6 +26,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
 
     @Override
+    @Transactional
     public ArticleFindDTO save(ArticleSaveDTO articleSaveDTO) {
         Article article = ArticleSaveDTO.toEntity(articleSaveDTO);
         article = articleRepository.save(article);
@@ -33,8 +35,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleFindDTO> findAll() {
-        List<Article> articleList = articleRepository.findAll();
-        return articleList.stream()
+        List<Article> articles = articleRepository.findAll();
+        return articles.stream()
             .map(ArticleFindDTO::toDTO)
             .collect(Collectors.toList());
     }
@@ -60,10 +62,10 @@ public class ArticleServiceImpl implements ArticleService {
             ));
         }
 
-        List<ArticleFindDTO> articleFindDTOList = articlePage.getContent().stream()
+        List<ArticleFindDTO> articleFindDTOs = articlePage.getContent().stream()
             .map(ArticleFindDTO::toDTO)
             .collect(Collectors.toList());
-        return new PageImpl<>(articleFindDTOList, pageable, articlePage.getTotalElements());
+        return new PageImpl<>(articleFindDTOs, pageable, articlePage.getTotalElements());
     }
 
     @Override
@@ -74,6 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional
     public void update(ArticleUpdateDTO articleUpdateDTO) {
         Article article = articleRepository.findById(articleUpdateDTO.getArticleId())
             .orElseThrow(() -> new ResourceNotFoundException("Article not found"));
@@ -86,6 +89,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long articleId) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new ResourceNotFoundException("Article not found"));

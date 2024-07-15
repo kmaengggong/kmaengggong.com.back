@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.article;
+package com.kmaengggong.kmaengggong.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,8 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import com.kmaengggong.kmaengggong.article.domain.Article;
-import com.kmaengggong.kmaengggong.article.domain.ArticleRepository;
+import com.kmaengggong.kmaengggong.board.domain.Article;
+import com.kmaengggong.kmaengggong.board.domain.ArticleRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

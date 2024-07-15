@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.article.domain;
+package com.kmaengggong.kmaengggong.board.domain;
 
 import java.time.LocalDateTime;
 
@@ -52,8 +52,9 @@ public class Article {
     }
 
     public void update(String title, String content, String headerImage) {
-        this.title = title;
-        this.content = content;
-        this.headerImage = headerImage;
+        if(title != null) this.title = title;
+        if(content != null) this.content = content;
+        if(headerImage != null) this.headerImage = headerImage;
+        this.updatedAt = LocalDateTime.now();
     }
 }

@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.article.domain;
+package com.kmaengggong.kmaengggong.board.domain;
 
 import java.util.List;
 

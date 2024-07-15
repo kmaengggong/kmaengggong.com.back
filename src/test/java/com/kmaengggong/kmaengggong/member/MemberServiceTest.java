@@ -18,7 +18,7 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
-import com.kmaengggong.kmaengggong.spring.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 
