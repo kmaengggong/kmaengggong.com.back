@@ -13,3 +13,6 @@ spring:
             hibernate:
                 format_sql: true
         show-sql: true
+
+mybatis:
+    mapper-locations: classpath:mybatis/mapper/**/**.xml
