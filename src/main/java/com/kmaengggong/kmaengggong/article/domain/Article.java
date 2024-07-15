@@ -45,8 +45,9 @@ public class Article {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String content, String headerImage) {
         this.title = title;
         this.content = content;
+        this.headerImage = headerImage;
     }
 }
