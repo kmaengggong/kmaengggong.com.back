@@ -23,6 +23,8 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
+import com.kmaengggong.kmaengggong.member.interfaces.dto.MemberRequest;
+import com.kmaengggong.kmaengggong.member.interfaces.dto.MemberResponse;
 import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 
 import lombok.RequiredArgsConstructor;
@@ -50,15 +52,14 @@ public class MemberController extends CommonController {
 		List<MemberResponse> memberRseponses = memberPage.getContent().stream()
 			.map(MemberResponse::toResponse)
 			.collect(Collectors.toList());
-		Page<MemberResponse> memberResponsePage = new PageImpl<>(
-			memberRseponses, pageable, memberPage.getTotalElements());
-		return ResponseEntity.ok(memberResponsePage.getContent());
+		// Page<MemberResponse> memberResponsePage = new PageImpl<>(
+		// 	memberRseponses, pageable, memberPage.getTotalElements());
+		return ResponseEntity.ok(memberRseponses);
 	}
 
 	@GetMapping("/{memberId}")
 	public ResponseEntity<MemberResponse> findById(@PathVariable("memberId") Long memberId) {
-		MemberFindDTO memberFindDTO = memberService.findById(memberId);
-		MemberResponse memberResponse = MemberResponse.toResponse(memberFindDTO);
+		MemberResponse memberResponse = MemberResponse.toResponse(memberService.findById(memberId));
 		return ResponseEntity.ok(memberResponse);
 	}
 

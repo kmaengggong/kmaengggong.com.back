@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.board.interfaces;
+package com.kmaengggong.kmaengggong.board.interfaces.dto;
 
 import com.kmaengggong.kmaengggong.board.application.dto.ArticleSaveDTO;
 import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;

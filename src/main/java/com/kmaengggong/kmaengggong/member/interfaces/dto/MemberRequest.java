@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.member.interfaces;
+package com.kmaengggong.kmaengggong.member.interfaces.dto;
 
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;

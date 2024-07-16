@@ -1,6 +1,7 @@
 package com.kmaengggong.kmaengggong.board.interfaces;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.kmaengggong.kmaengggong.board.application.ArticleService;
+import com.kmaengggong.kmaengggong.board.application.CommentService;
 import com.kmaengggong.kmaengggong.board.application.dto.ArticleFindDTO;
 import com.kmaengggong.kmaengggong.board.application.dto.ArticleSaveDTO;
 import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;
+import com.kmaengggong.kmaengggong.board.interfaces.dto.ArticleRequest;
+import com.kmaengggong.kmaengggong.board.interfaces.dto.ArticleResponse;
+import com.kmaengggong.kmaengggong.board.interfaces.dto.BoardResponse;
+import com.kmaengggong.kmaengggong.board.interfaces.dto.CommentResponse;
 import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/board")
 public class BoardController extends CommonController {
 	private final ArticleService articleService;
+	private final CommentService commentService;
 
 	@PostMapping
 	public ResponseEntity<Void> save(@RequestBody ArticleRequest articleRequest, UriComponentsBuilder ucb) {
@@ -44,14 +51,37 @@ public class BoardController extends CommonController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ArticleResponse>> findAll(Pageable pageable) {
+	public ResponseEntity<List<BoardResponse>> findAll(Pageable pageable) {
 		Page<ArticleFindDTO> articlePage = articleService.findAll(pageable);
 		List<ArticleResponse> articleResponses = articlePage.getContent().stream()
 			.map(ArticleResponse::toResponse)
 			.collect(Collectors.toList());
-		Page<ArticleResponse> articleResponsePage = new PageImpl<>(
-			articleResponses, pageable, articlePage.getTotalElements());
-		return ResponseEntity.ok(articleResponsePage.getContent());
+	
+		List<BoardResponse> boardResponses = articleResponses.stream()
+			.map(articleResponse -> {
+				List<CommentResponse> commentResponses = commentService.findAllByArticleId(
+					articleResponse.getArticleId()).stream()
+						.map(CommentResponse::toResponse)
+						.collect(Collectors.toList());
+				return new BoardResponse(articleResponse, commentResponses);
+			})
+			.collect(Collectors.toList());
+		// Page<ArticleFindDTO> articlePage = articleService.findAll(pageable);
+		// List<ArticleResponse> articleResponses = articlePage.getContent().stream()
+		// 	.map(ArticleResponse::toResponse)
+		// 	.collect(Collectors.toList());
+		// List<List<CommentResponse>> commentResponses = new ArrayList<>();
+		// List<BoardResponse> boardResponses = new ArrayList<>();
+		// for(ArticleResponse articleResponse : articleResponses){
+		// 	List<CommentFindDTO> commentFindDTOs = commentService.findAllByArticleId(articleResponse.getArticleId());
+		// 	commentResponses.add(commentFindDTOs.stream()
+		// 		.map(CommentResponse::toResponse)
+		// 		.collect(Collectors.toList()));
+		// }
+		// Page<ArticleResponse> articleResponsePage = new PageImpl<>(
+		// 	articleResponses, pageable, articlePage.getTotalElements());
+		
+		return ResponseEntity.ok(boardResponses);
 	}
 
 	@GetMapping("/{articleId}")

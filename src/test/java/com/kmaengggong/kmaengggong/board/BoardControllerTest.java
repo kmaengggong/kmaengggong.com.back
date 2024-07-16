@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import com.kmaengggong.kmaengggong.board.interfaces.ArticleRequest;
+import com.kmaengggong.kmaengggong.board.interfaces.dto.ArticleRequest;
 import com.kmaengggong.kmaengggong.common.CommonTest;
 
 import jakarta.transaction.Transactional;

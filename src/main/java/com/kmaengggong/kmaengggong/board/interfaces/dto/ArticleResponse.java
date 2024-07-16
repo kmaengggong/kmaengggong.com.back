@@ -1,4 +1,4 @@
-package com.kmaengggong.kmaengggong.board.interfaces;
+package com.kmaengggong.kmaengggong.board.interfaces.dto;
 
 import java.time.LocalDateTime;
 
