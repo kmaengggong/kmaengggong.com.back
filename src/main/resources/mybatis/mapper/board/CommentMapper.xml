@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kmaengggong.kmaengggong.board.domain.CommentMapper">
+	<select id="findAll" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
+		SELECT
+			COMMENT_ID AS commentId,
+			AUTHOR_ID AS authorId,
+			ARTICLE_ID AS articleId,
+			CONTENT AS content,
+			LIKE_COUNT AS likeCount,
+			CREATED_AT AS createdAt
+		FROM
+			COMMENT
+	</select>
+	
+	<select id="findAllByArticleId" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
+		SELECT
+			COMMENT_ID AS commentId,
+			AUTHOR_ID AS authorId,
+			ARTICLE_ID AS articleId,
+			CONTENT AS content,
+			LIKE_COUNT AS likeCount,
+			CREATED_AT AS createdAt
+		FROM
+			COMMENT
+		WHERE
+			ARTICLE_ID = #{articleId}
+	</select>
+	
+	<select id="findById" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
+		SELECT
+			COMMENT_ID AS commentId,
+			AUTHOR_ID AS authorId,
+			ARTICLE_ID AS articleId,
+			CONTENT AS content,
+			LIKE_COUNT AS likeCount,
+			CREATED_AT AS createdAt
+		FROM
+			COMMENT
+		WHERE
+			COMMENT_ID = #{commentId}
+	</select>
+
+	<select id="findLatest" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
+		SELECT
+			COMMENT_ID AS commentId,
+			AUTHOR_ID AS authorId,
+			ARTICLE_ID AS articleId,
+			CONTENT AS content,
+			LIKE_COUNT AS likeCount,
+			CREATED_AT AS createdAt
+		FROM
+			COMMENT
+		ORDER BY
+			CREATED_AT DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="save" parameterType="com.kmaengggong.kmaengggong.board.domain.Comment">
+		INSERT INTO COMMENT(
+			COMMENT_ID,
+			AUTHOR_ID,
+			ARTICLE_ID,
+			CONTENT
+		)
+		VALUES (
+			#{comment.commentId},
+			#{comment.authorId},
+			#{comment.articleId},
+			#{comment.content}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.kmaengggong.kmaengggong.board.domain.Comment">
+		UPDATE
+			COMMENT
+		SET
+			CONTENT = #{comment.content}
+		WHERE
+			COMMENT_ID = #{comment.commentId}
+	</update>
+	
+	<!-- <update id="delete">
+		UPDATE
+			COMMENT
+		SET
+			IS_DELETED = b'1'
+		WHERE
+			COMMENT_ID = #{commentId}
+	</update> -->
+	
+	<delete id="deleteById">
+		DELETE
+		FROM
+			COMMENT
+		WHERE
+			COMMENT_ID = #{commentId}
+	</delete>
+</mapper>
+	

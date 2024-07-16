@@ -16,23 +16,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleResponse {
-    private Long articleId;
-    private Long authorId;
-    private String title;
-    private String content;
-    private String headerImage;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+	private Long articleId;
+	private Long authorId;
+	private String title;
+	private String content;
+	private String headerImage;
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 
-    public static ArticleResponse toResponse(ArticleFindDTO articleFindDTO) {
-        return ArticleResponse.builder()
-            .articleId(articleFindDTO.getArticleId())
-            .authorId(articleFindDTO.getAuthorId())
-            .title(articleFindDTO.getTitle())
-            .content(articleFindDTO.getContent())
-            .headerImage(articleFindDTO.getHeaderImage())
-            .createdAt(articleFindDTO.getCreatedAt())
-            .updatedAt(articleFindDTO.getUpdatedAt())
-            .build();
-    }
+	public static ArticleResponse toResponse(ArticleFindDTO articleFindDTO) {
+		return ArticleResponse.builder()
+			.articleId(articleFindDTO.getArticleId())
+			.authorId(articleFindDTO.getAuthorId())
+			.title(articleFindDTO.getTitle())
+			.content(articleFindDTO.getContent())
+			.headerImage(articleFindDTO.getHeaderImage())
+			.createdAt(articleFindDTO.getCreatedAt())
+			.updatedAt(articleFindDTO.getUpdatedAt())
+			.build();
+	}
 }

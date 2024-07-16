@@ -13,18 +13,18 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDT
 
 @Service
 public interface MemberService {
-    MemberFindDTO save(MemberSaveDTO memberSaveDTO);
+	MemberFindDTO save(MemberSaveDTO memberSaveDTO);
 
-    List<MemberFindDTO> findAll();
-    Page<MemberFindDTO> findAll(Pageable pageable);
-    MemberFindDTO findById(Long memberId);
-    MemberFindDTO findByEmail(String email);
-    MemberFindDTO findByNickname(String nickname);
+	List<MemberFindDTO> findAll();
+	Page<MemberFindDTO> findAll(Pageable pageable);
+	MemberFindDTO findById(Long memberId);
+	MemberFindDTO findByEmail(String email);
+	MemberFindDTO findByNickname(String nickname);
 
-    void update(MemberUpdateDTO memberUpdateDTO);
-    void updatePassword(MemberUpdatePasswordDTO MemberUpdatePasswordDTO);
+	void update(MemberUpdateDTO memberUpdateDTO);
+	void updatePassword(MemberUpdatePasswordDTO MemberUpdatePasswordDTO);
 
-    void deleteById(Long memberId);
+	void deleteById(Long memberId);
 
-    boolean passwordCheck(Long memberId, String password);
+	boolean passwordCheck(Long memberId, String password);
 }

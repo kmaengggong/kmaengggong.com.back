@@ -12,13 +12,13 @@ import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;
 
 @Service
 public interface ArticleService {
-    ArticleFindDTO save(ArticleSaveDTO articleSaveDTO);
+	ArticleFindDTO save(ArticleSaveDTO articleSaveDTO);
 
-    List<ArticleFindDTO> findAll();
-    Page<ArticleFindDTO> findAll(Pageable pageable);
-    ArticleFindDTO findById(Long articleId);
+	List<ArticleFindDTO> findAll();
+	Page<ArticleFindDTO> findAll(Pageable pageable);
+	ArticleFindDTO findById(Long articleId);
 
-    void update(ArticleUpdateDTO articleUpdateDTO);
+	void update(ArticleUpdateDTO articleUpdateDTO);
 
-    void deleteById(Long articleId);
+	void deleteById(Long articleId);
 }

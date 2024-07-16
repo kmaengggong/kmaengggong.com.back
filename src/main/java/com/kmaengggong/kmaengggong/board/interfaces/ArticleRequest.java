@@ -15,25 +15,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleRequest {
-    private Long authorId;
-    private String title;
-    private String content;
-    private String headerIamge;
+	private Long authorId;
+	private String title;
+	private String content;
+	private String headerIamge;
 
-    public static ArticleSaveDTO toSaveDTO(ArticleRequest articleRequest) {
-        return ArticleSaveDTO.builder()
-            .authorId(articleRequest.getAuthorId())
-            .title(articleRequest.getTitle())
-            .content(articleRequest.getContent())
-            .headerImage(articleRequest.getHeaderIamge())
-            .build();
-    }
+	public static ArticleSaveDTO toSaveDTO(ArticleRequest articleRequest) {
+		return ArticleSaveDTO.builder()
+			.authorId(articleRequest.getAuthorId())
+			.title(articleRequest.getTitle())
+			.content(articleRequest.getContent())
+			.headerImage(articleRequest.getHeaderIamge())
+			.build();
+	}
 
-    public static ArticleUpdateDTO toUpdateDTO(ArticleRequest articleRequest) {
-        return ArticleUpdateDTO.builder()
-            .title(articleRequest.getTitle())
-            .content(articleRequest.getContent())
-            .headerImage(articleRequest.getHeaderIamge())
-            .build();
-    }
+	public static ArticleUpdateDTO toUpdateDTO(ArticleRequest articleRequest) {
+		return ArticleUpdateDTO.builder()
+			.title(articleRequest.getTitle())
+			.content(articleRequest.getContent())
+			.headerImage(articleRequest.getHeaderIamge())
+			.build();
+	}
 }

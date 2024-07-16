@@ -14,14 +14,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
-    private Long commentId;
-    private Long authorId;
-    private Long articleId;
-    private String content;
-    private Long likeCount;
-    private LocalDateTime createdAt;
+	private Long commentId;
+	private Long authorId;
+	private Long articleId;
+	private String content;
+	private Long likeCount;
+	private LocalDateTime createdAt;
 
-    public void updateLike() {
-        this.likeCount += 1;
-    }
+	public void updateLike() {
+		this.likeCount += 1;
+	}
 }

@@ -14,17 +14,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleSaveDTO {
-    private Long authorId;
-    private String title;
-    private String content;
-    private String headerImage;
+	private Long authorId;
+	private String title;
+	private String content;
+	private String headerImage;
 
-    public static Article toEntity(ArticleSaveDTO articleSaveDTO) {
-        return Article.builder()
-            .authorId(articleSaveDTO.getAuthorId())
-            .title(articleSaveDTO.getTitle())
-            .content(articleSaveDTO.getContent())
-            .headerImage(articleSaveDTO.getHeaderImage())
-            .build();
-    }
+	public static Article toEntity(ArticleSaveDTO articleSaveDTO) {
+		return Article.builder()
+			.authorId(articleSaveDTO.getAuthorId())
+			.title(articleSaveDTO.getTitle())
+			.content(articleSaveDTO.getContent())
+			.headerImage(articleSaveDTO.getHeaderImage())
+			.build();
+	}
 }

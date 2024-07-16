@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    List<Member> findAll();
-    Page<Member> findAll(Pageable pageable);
-    Optional<Member> findByEmail(String email);
-    Optional<Member> findByNickname(String nickname);
-    
-    boolean existsByMemberId(Long memberId);
+	List<Member> findAll();
+	Page<Member> findAll(Pageable pageable);
+	Optional<Member> findByEmail(String email);
+	Optional<Member> findByNickname(String nickname);
+	
+	boolean existsByMemberId(Long memberId);
 }

@@ -21,29 +21,29 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long memberId;
 
-    @Column(nullable = false)
-    private String email;
+	@Column(nullable = false)
+	private String email;
 
-    private String password;
+	private String password;
 
-    private String nickname;
+	private String nickname;
 
-    private LocalDateTime registeredAt;
+	private LocalDateTime registeredAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.registeredAt = LocalDateTime.now();
-    }
+	@PrePersist
+	protected void onCreate() {
+		this.registeredAt = LocalDateTime.now();
+	}
 
-    public void update(String nickname) {
-        if(nickname != null) this.nickname = nickname;
-    }
+	public void update(String nickname) {
+		if(nickname != null) this.nickname = nickname;
+	}
 
-    public void updatePassword(String password) {
-        if(password != null) this.password = password;
-    }
+	public void updatePassword(String password) {
+		if(password != null) this.password = password;
+	}
 }

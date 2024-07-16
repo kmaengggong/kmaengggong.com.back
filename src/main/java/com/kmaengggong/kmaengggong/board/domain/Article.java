@@ -22,39 +22,39 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long articleId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long articleId;
 
-    @Column(nullable = false)
-    private Long authorId;
+	@Column(nullable = false)
+	private Long authorId;
 
-    @Column(nullable = false)
-    private String title;
+	@Column(nullable = false)
+	private String title;
 
-    private String content;
+	private String content;
 
-    private String headerImage;
+	private String headerImage;
 
-    private LocalDateTime createdAt;
+	private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+	private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+		this.updatedAt = LocalDateTime.now();
+	}
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
 
-    public void update(String title, String content, String headerImage) {
-        if(title != null) this.title = title;
-        if(content != null) this.content = content;
-        if(headerImage != null) this.headerImage = headerImage;
-        this.updatedAt = LocalDateTime.now();
-    }
+	public void update(String title, String content, String headerImage) {
+		if(title != null) this.title = title;
+		if(content != null) this.content = content;
+		if(headerImage != null) this.headerImage = headerImage;
+		this.updatedAt = LocalDateTime.now();
+	}
 }

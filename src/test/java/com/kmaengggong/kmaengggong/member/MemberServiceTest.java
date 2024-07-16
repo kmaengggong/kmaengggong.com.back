@@ -25,194 +25,194 @@ import jakarta.transaction.Transactional;
 @SpringBootTest
 @Transactional
 public class MemberServiceTest {
-    @Autowired
-    private MemberService memberService;
+	@Autowired
+	private MemberService memberService;
 
-    private MemberFindDTO memberFindDTO;
-    private MemberSaveDTO memberSaveDTO;
-    
-    private String email = "email@email.com";
-    private String password = "password";
-    private String nickname = "nickname";
+	private MemberFindDTO memberFindDTO;
+	private MemberSaveDTO memberSaveDTO;
+	
+	private String email = "email@email.com";
+	private String password = "password";
+	private String nickname = "nickname";
 
-    @BeforeEach
-    void setUp() {
-        memberSaveDTO = MemberSaveDTO.builder()
-            .email(email)
-            .password(password)
-            .nickname(nickname)
-            .build();
-    }
+	@BeforeEach
+	void setUp() {
+		memberSaveDTO = MemberSaveDTO.builder()
+			.email(email)
+			.password(password)
+			.nickname(nickname)
+			.build();
+	}
 
-    @Test
-    @DisplayName("C: save")
-    void saveTest() {
-        // When
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("C: save")
+	void saveTest() {
+		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // Then
-        assertThat(memberFindDTO).isNotNull();
-        assertThat(memberFindDTO.getMemberId()).isGreaterThan(0);
-    }
+		// Then
+		assertThat(memberFindDTO).isNotNull();
+		assertThat(memberFindDTO.getMemberId()).isGreaterThan(0);
+	}
 
-    @Test
-    @DisplayName("R: findAll")
-    void findAllTest() {
-        // Given
-        String email1 = "email1@email1.com";
-        String password1 = "password1";
-        String nickname1 = "nickname1";
-        MemberSaveDTO memberSaveDTO1 = MemberSaveDTO.builder()
-            .email(email1)
-            .password(password1)
-            .nickname(nickname1)
-            .build();
+	@Test
+	@DisplayName("R: findAll")
+	void findAllTest() {
+		// Given
+		String email1 = "email1@email1.com";
+		String password1 = "password1";
+		String nickname1 = "nickname1";
+		MemberSaveDTO memberSaveDTO1 = MemberSaveDTO.builder()
+			.email(email1)
+			.password(password1)
+			.nickname(nickname1)
+			.build();
 
-        memberService.save(memberSaveDTO);
-        memberService.save(memberSaveDTO1);
+		memberService.save(memberSaveDTO);
+		memberService.save(memberSaveDTO1);
 
-        // When
-        List<MemberFindDTO> memberList = memberService.findAll();
+		// When
+		List<MemberFindDTO> memberList = memberService.findAll();
 
-        // Then
-        assertThat(memberList).isNotNull();
-        assertThat(memberList.size()).isEqualTo(2);
-    }
+		// Then
+		assertThat(memberList).isNotNull();
+		assertThat(memberList.size()).isEqualTo(2);
+	}
 
-    @Test
-    @DisplayName("R: findAllPage")
-    void findAllPageTest() {
-        // Given
-        String email1 = "email1@email1.com";
-        String password1 = "password1";
-        String nickname1 = "nickname1";
-        MemberSaveDTO memberSaveDTO1 = MemberSaveDTO.builder()
-            .email(email1)
-            .password(password1)
-            .nickname(nickname1)
-            .build();
+	@Test
+	@DisplayName("R: findAllPage")
+	void findAllPageTest() {
+		// Given
+		String email1 = "email1@email1.com";
+		String password1 = "password1";
+		String nickname1 = "nickname1";
+		MemberSaveDTO memberSaveDTO1 = MemberSaveDTO.builder()
+			.email(email1)
+			.password(password1)
+			.nickname(nickname1)
+			.build();
 
-        memberService.save(memberSaveDTO);
-        memberService.save(memberSaveDTO1);
+		memberService.save(memberSaveDTO);
+		memberService.save(memberSaveDTO1);
 
-        // When
-        Page<MemberFindDTO> memberPage = memberService.findAll(PageRequest.of(0, 10));
+		// When
+		Page<MemberFindDTO> memberPage = memberService.findAll(PageRequest.of(0, 10));
 
-        // Then
-        assertThat(memberPage).isNotNull();
-        assertThat(memberPage.getTotalElements()).isEqualTo(2);
-        assertThat(memberPage.getTotalPages()).isEqualTo(1);
-        assertThat(memberPage.getSize()).isEqualTo(10);
-        assertThat(memberPage.getContent()).hasSize(2);
-    }
+		// Then
+		assertThat(memberPage).isNotNull();
+		assertThat(memberPage.getTotalElements()).isEqualTo(2);
+		assertThat(memberPage.getTotalPages()).isEqualTo(1);
+		assertThat(memberPage.getSize()).isEqualTo(10);
+		assertThat(memberPage.getContent()).hasSize(2);
+	}
 
-    @Test
-    @DisplayName("R: findById")
-    void findByIdTest() {
-        // Given
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("R: findById")
+	void findByIdTest() {
+		// Given
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // When
-        MemberFindDTO foundMember = memberService.findById(memberFindDTO.getMemberId());
+		// When
+		MemberFindDTO foundMember = memberService.findById(memberFindDTO.getMemberId());
 
-        // Then
-        assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getMemberId()).isEqualTo(memberFindDTO.getMemberId());
-        assertThat(foundMember.getEmail()).isEqualTo(memberSaveDTO.getEmail());
-        assertThat(foundMember.getNickname()).isEqualTo(memberSaveDTO.getNickname());
-    }
+		// Then
+		assertThat(foundMember).isNotNull();
+		assertThat(foundMember.getMemberId()).isEqualTo(memberFindDTO.getMemberId());
+		assertThat(foundMember.getEmail()).isEqualTo(memberSaveDTO.getEmail());
+		assertThat(foundMember.getNickname()).isEqualTo(memberSaveDTO.getNickname());
+	}
 
-    @Test
-    @DisplayName("R: findByEmail")
-    void findByEmailTest() {
-        // Given
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("R: findByEmail")
+	void findByEmailTest() {
+		// Given
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // When
-        MemberFindDTO foundMember = memberService.findByEmail(memberFindDTO.getEmail());
+		// When
+		MemberFindDTO foundMember = memberService.findByEmail(memberFindDTO.getEmail());
 
-        // Then
-        assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getMemberId()).isEqualTo(memberFindDTO.getMemberId());
-        assertThat(foundMember.getEmail()).isEqualTo(memberSaveDTO.getEmail());
-        assertThat(foundMember.getNickname()).isEqualTo(memberSaveDTO.getNickname());
-    }
+		// Then
+		assertThat(foundMember).isNotNull();
+		assertThat(foundMember.getMemberId()).isEqualTo(memberFindDTO.getMemberId());
+		assertThat(foundMember.getEmail()).isEqualTo(memberSaveDTO.getEmail());
+		assertThat(foundMember.getNickname()).isEqualTo(memberSaveDTO.getNickname());
+	}
 
-    @Test
-    @DisplayName("R: findByNickname")
-    void findByNicknameTest() {
-        // Given
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("R: findByNickname")
+	void findByNicknameTest() {
+		// Given
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // When
-        MemberFindDTO foundMember = memberService.findByNickname(memberFindDTO.getNickname());
+		// When
+		MemberFindDTO foundMember = memberService.findByNickname(memberFindDTO.getNickname());
 
-        // Then
-        assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getMemberId()).isEqualTo(memberFindDTO.getMemberId());
-        assertThat(foundMember.getEmail()).isEqualTo(memberSaveDTO.getEmail());
-        assertThat(foundMember.getNickname()).isEqualTo(memberSaveDTO.getNickname());
-    }
+		// Then
+		assertThat(foundMember).isNotNull();
+		assertThat(foundMember.getMemberId()).isEqualTo(memberFindDTO.getMemberId());
+		assertThat(foundMember.getEmail()).isEqualTo(memberSaveDTO.getEmail());
+		assertThat(foundMember.getNickname()).isEqualTo(memberSaveDTO.getNickname());
+	}
 
-    @Test
-    @DisplayName("U: update")
-    void updateTest() {
-        // Given
-        String updateNickname = "updateNickname";
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("U: update")
+	void updateTest() {
+		// Given
+		String updateNickname = "updateNickname";
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // When
-        MemberFindDTO savedMemberFindDTO = memberService.findById(memberFindDTO.getMemberId());
-        assertThat(savedMemberFindDTO).isNotNull();
+		// When
+		MemberFindDTO savedMemberFindDTO = memberService.findById(memberFindDTO.getMemberId());
+		assertThat(savedMemberFindDTO).isNotNull();
 
-        MemberUpdateDTO memberUpdateDTO = MemberUpdateDTO.builder()
-            .memberId(savedMemberFindDTO.getMemberId())
-            .nickname(updateNickname)
-            .build();
-        memberService.update(memberUpdateDTO);
+		MemberUpdateDTO memberUpdateDTO = MemberUpdateDTO.builder()
+			.memberId(savedMemberFindDTO.getMemberId())
+			.nickname(updateNickname)
+			.build();
+		memberService.update(memberUpdateDTO);
 
-        MemberFindDTO updatedMemberFindDTO = memberService.findById(memberUpdateDTO.getMemberId());
+		MemberFindDTO updatedMemberFindDTO = memberService.findById(memberUpdateDTO.getMemberId());
 
-        // Then
-        assertThat(updatedMemberFindDTO).isNotNull();
-        assertThat(updatedMemberFindDTO.getNickname()).isEqualTo(updateNickname);
-    }
+		// Then
+		assertThat(updatedMemberFindDTO).isNotNull();
+		assertThat(updatedMemberFindDTO.getNickname()).isEqualTo(updateNickname);
+	}
 
-    @Test
-    @DisplayName("U: updatedPassword")
-    void updatePasswordTest() {
-        // Given
-        String updatePassword = "updatePassword";
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("U: updatedPassword")
+	void updatePasswordTest() {
+		// Given
+		String updatePassword = "updatePassword";
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // When
-        MemberFindDTO savedMemberFindDTO = memberService.findById(memberFindDTO.getMemberId());
-        assertThat(savedMemberFindDTO).isNotNull();
+		// When
+		MemberFindDTO savedMemberFindDTO = memberService.findById(memberFindDTO.getMemberId());
+		assertThat(savedMemberFindDTO).isNotNull();
 
-        MemberUpdatePasswordDTO memberUpdatePasswordDTO = MemberUpdatePasswordDTO.builder()
-            .memberId(savedMemberFindDTO.getMemberId())
-            .password(updatePassword)
-            .build();
-        memberService.updatePassword(memberUpdatePasswordDTO);
+		MemberUpdatePasswordDTO memberUpdatePasswordDTO = MemberUpdatePasswordDTO.builder()
+			.memberId(savedMemberFindDTO.getMemberId())
+			.password(updatePassword)
+			.build();
+		memberService.updatePassword(memberUpdatePasswordDTO);
 
-        MemberFindDTO updatedMemberFindDTO = memberService.findById(memberUpdatePasswordDTO.getMemberId());
+		MemberFindDTO updatedMemberFindDTO = memberService.findById(memberUpdatePasswordDTO.getMemberId());
 
-        // Then
-        assertThat(updatedMemberFindDTO).isNotNull();
-        assertThat(memberService.passwordCheck(memberFindDTO.getMemberId(), updatePassword)).isTrue();
-    }
+		// Then
+		assertThat(updatedMemberFindDTO).isNotNull();
+		assertThat(memberService.passwordCheck(memberFindDTO.getMemberId(), updatePassword)).isTrue();
+	}
 
-    @Test
-    @DisplayName("D: deleteById")
-    void deleteByIdTest() {
-        // Given
-        memberFindDTO = memberService.save(memberSaveDTO);
+	@Test
+	@DisplayName("D: deleteById")
+	void deleteByIdTest() {
+		// Given
+		memberFindDTO = memberService.save(memberSaveDTO);
 
-        // When
-        memberService.deleteById(memberFindDTO.getMemberId());
-        
-        // Then
-        assertThrows(ResourceNotFoundException.class,
-            () -> memberService.findById(memberFindDTO.getMemberId()));
-    }
+		// When
+		memberService.deleteById(memberFindDTO.getMemberId());
+		
+		// Then
+		assertThrows(ResourceNotFoundException.class,
+			() -> memberService.findById(memberFindDTO.getMemberId()));
+	}
 }

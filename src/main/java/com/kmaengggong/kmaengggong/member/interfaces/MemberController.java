@@ -31,56 +31,56 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController extends CommonController {
-    private final MemberService memberService;
+	private final MemberService memberService;
 
-    @PostMapping
-    public ResponseEntity<Void> save(@RequestBody MemberRequest memberRequest, UriComponentsBuilder ucb) {
-        MemberSaveDTO memberSaveDTO = MemberRequest.toSaveDto(memberRequest);
-        MemberFindDTO memberFindDTO = memberService.save(memberSaveDTO);
-        URI uri = ucb
-            .path("member/{memberId}")
-            .buildAndExpand(memberFindDTO.getMemberId())
-            .toUri();
-        return ResponseEntity.created(uri).build();
-    }
+	@PostMapping
+	public ResponseEntity<Void> save(@RequestBody MemberRequest memberRequest, UriComponentsBuilder ucb) {
+		MemberSaveDTO memberSaveDTO = MemberRequest.toSaveDto(memberRequest);
+		MemberFindDTO memberFindDTO = memberService.save(memberSaveDTO);
+		URI uri = ucb
+			.path("member/{memberId}")
+			.buildAndExpand(memberFindDTO.getMemberId())
+			.toUri();
+		return ResponseEntity.created(uri).build();
+	}
 
-    @GetMapping
-    public ResponseEntity<List<MemberResponse>> findAll(Pageable pageable) {
-        Page<MemberFindDTO> memberPage = memberService.findAll(pageable);
-        List<MemberResponse> memberRseponses = memberPage.getContent().stream()
-            .map(MemberResponse::toResponse)
-            .collect(Collectors.toList());
-        Page<MemberResponse> memberResponsePage = new PageImpl<>(
-            memberRseponses, pageable, memberPage.getTotalElements());
-        return ResponseEntity.ok(memberResponsePage.getContent());
-    }
+	@GetMapping
+	public ResponseEntity<List<MemberResponse>> findAll(Pageable pageable) {
+		Page<MemberFindDTO> memberPage = memberService.findAll(pageable);
+		List<MemberResponse> memberRseponses = memberPage.getContent().stream()
+			.map(MemberResponse::toResponse)
+			.collect(Collectors.toList());
+		Page<MemberResponse> memberResponsePage = new PageImpl<>(
+			memberRseponses, pageable, memberPage.getTotalElements());
+		return ResponseEntity.ok(memberResponsePage.getContent());
+	}
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<MemberResponse> findById(@PathVariable("memberId") Long memberId) {
-        MemberFindDTO memberFindDTO = memberService.findById(memberId);
-        MemberResponse memberResponse = MemberResponse.toResponse(memberFindDTO);
-        return ResponseEntity.ok(memberResponse);
-    }
+	@GetMapping("/{memberId}")
+	public ResponseEntity<MemberResponse> findById(@PathVariable("memberId") Long memberId) {
+		MemberFindDTO memberFindDTO = memberService.findById(memberId);
+		MemberResponse memberResponse = MemberResponse.toResponse(memberFindDTO);
+		return ResponseEntity.ok(memberResponse);
+	}
 
-    @PatchMapping("/{memberId}")
-    public ResponseEntity<Void> update(@PathVariable("memberId") Long memberId, @RequestBody MemberRequest memberRequest) {
-        MemberUpdateDTO memberUpdateDTO = MemberRequest.toUpdateDto(memberRequest);
-        memberUpdateDTO.setMemberId(memberId);
-        memberService.update(memberUpdateDTO);
-        return ResponseEntity.noContent().build();
-    }
+	@PatchMapping("/{memberId}")
+	public ResponseEntity<Void> update(@PathVariable("memberId") Long memberId, @RequestBody MemberRequest memberRequest) {
+		MemberUpdateDTO memberUpdateDTO = MemberRequest.toUpdateDto(memberRequest);
+		memberUpdateDTO.setMemberId(memberId);
+		memberService.update(memberUpdateDTO);
+		return ResponseEntity.noContent().build();
+	}
 
-    @PatchMapping("/{memberId}/password")
-    public ResponseEntity<Void> updatePassword(@PathVariable("memberId") Long memberId, @RequestBody MemberRequest memberRequest) {
-        MemberUpdatePasswordDTO memberUpdatePasswordDTO = MemberRequest.toUpdatePasswordDto(memberRequest);
-        memberUpdatePasswordDTO.setMemberId(memberId);
-        memberService.updatePassword(memberUpdatePasswordDTO);
-        return ResponseEntity.noContent().build();
-    }
+	@PatchMapping("/{memberId}/password")
+	public ResponseEntity<Void> updatePassword(@PathVariable("memberId") Long memberId, @RequestBody MemberRequest memberRequest) {
+		MemberUpdatePasswordDTO memberUpdatePasswordDTO = MemberRequest.toUpdatePasswordDto(memberRequest);
+		memberUpdatePasswordDTO.setMemberId(memberId);
+		memberService.updatePassword(memberUpdatePasswordDTO);
+		return ResponseEntity.noContent().build();
+	}
 
-    @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteById(@PathVariable("memberId") Long memberId) {
-        memberService.deleteById(memberId);
-        return ResponseEntity.noContent().build();
-    }
+	@DeleteMapping("/{memberId}")
+	public ResponseEntity<Void> deleteById(@PathVariable("memberId") Long memberId) {
+		memberService.deleteById(memberId);
+		return ResponseEntity.noContent().build();
+	}
 }

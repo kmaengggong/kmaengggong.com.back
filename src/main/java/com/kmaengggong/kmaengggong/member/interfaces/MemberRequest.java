@@ -16,27 +16,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberRequest {
-    private String email;
-    private String password;
-    private String nickname;
+	private String email;
+	private String password;
+	private String nickname;
 
-    public static MemberSaveDTO toSaveDto(MemberRequest memberRequest) {
-        return MemberSaveDTO.builder()
-            .email(memberRequest.getEmail())
-            .password(memberRequest.getPassword())
-            .nickname(memberRequest.getNickname())
-            .build();
-    }
+	public static MemberSaveDTO toSaveDto(MemberRequest memberRequest) {
+		return MemberSaveDTO.builder()
+			.email(memberRequest.getEmail())
+			.password(memberRequest.getPassword())
+			.nickname(memberRequest.getNickname())
+			.build();
+	}
 
-    public static MemberUpdateDTO toUpdateDto(MemberRequest memberRequest) {
-        return MemberUpdateDTO.builder()
-            .nickname(memberRequest.getNickname())
-            .build();
-    }
+	public static MemberUpdateDTO toUpdateDto(MemberRequest memberRequest) {
+		return MemberUpdateDTO.builder()
+			.nickname(memberRequest.getNickname())
+			.build();
+	}
 
-    public static MemberUpdatePasswordDTO toUpdatePasswordDto(MemberRequest memberRequest) {
-        return MemberUpdatePasswordDTO.builder()
-            .password(memberRequest.getPassword())
-            .build();
-    }
+	public static MemberUpdatePasswordDTO toUpdatePasswordDto(MemberRequest memberRequest) {
+		return MemberUpdatePasswordDTO.builder()
+			.password(memberRequest.getPassword())
+			.build();
+	}
 }

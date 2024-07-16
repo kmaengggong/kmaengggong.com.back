@@ -14,13 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberUpdatePasswordDTO {
-    private Long memberId;
-    private String password;
+	private Long memberId;
+	private String password;
 
-    public static Member toEntity(MemberUpdatePasswordDTO memberUpdatePasswordDTO) {
-        return Member.builder()
-            .memberId(memberUpdatePasswordDTO.getMemberId())
-            .password(memberUpdatePasswordDTO.getPassword())
-            .build();
-    }
+	public static Member toEntity(MemberUpdatePasswordDTO memberUpdatePasswordDTO) {
+		return Member.builder()
+			.memberId(memberUpdatePasswordDTO.getMemberId())
+			.password(memberUpdatePasswordDTO.getPassword())
+			.build();
+	}
 }

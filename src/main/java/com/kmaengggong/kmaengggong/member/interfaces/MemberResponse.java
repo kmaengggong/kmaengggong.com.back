@@ -16,18 +16,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberResponse {
-    private Long memberId;
-    private String email;
-    private String password;
-    private String nickname;
-    private LocalDateTime registeredAt;
+	private Long memberId;
+	private String email;
+	private String password;
+	private String nickname;
+	private LocalDateTime registeredAt;
 
-    public static MemberResponse toResponse(MemberFindDTO memberFindDTO) {
-        return MemberResponse.builder()
-            .memberId(memberFindDTO.getMemberId())
-            .email(memberFindDTO.getEmail())
-            .nickname(memberFindDTO.getNickname())
-            .registeredAt(memberFindDTO.getRegisteredAt())
-            .build();
-    }
+	public static MemberResponse toResponse(MemberFindDTO memberFindDTO) {
+		return MemberResponse.builder()
+			.memberId(memberFindDTO.getMemberId())
+			.email(memberFindDTO.getEmail())
+			.nickname(memberFindDTO.getNickname())
+			.registeredAt(memberFindDTO.getRegisteredAt())
+			.build();
+	}
 }

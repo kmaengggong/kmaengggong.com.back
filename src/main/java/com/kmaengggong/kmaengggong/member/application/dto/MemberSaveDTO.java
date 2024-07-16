@@ -14,15 +14,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberSaveDTO {
-    private String email;
-    private String password;
-    private String nickname;
+	private String email;
+	private String password;
+	private String nickname;
 
-    public static Member toEntity(MemberSaveDTO memberSaveDTO) {
-        return Member.builder()
-            .email(memberSaveDTO.getEmail())
-            .password(memberSaveDTO.getPassword())
-            .nickname(memberSaveDTO.getNickname())
-            .build();
-    }
+	public static Member toEntity(MemberSaveDTO memberSaveDTO) {
+		return Member.builder()
+			.email(memberSaveDTO.getEmail())
+			.password(memberSaveDTO.getPassword())
+			.nickname(memberSaveDTO.getNickname())
+			.build();
+	}
 }

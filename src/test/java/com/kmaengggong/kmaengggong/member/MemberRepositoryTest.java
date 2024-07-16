@@ -19,190 +19,190 @@ import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class MemberRepositoryTest {
-    @Autowired
-    private MemberRepository memberRepository;
+	@Autowired
+	private MemberRepository memberRepository;
 
-    private Member member;
+	private Member member;
 
-    private String email = "email@email.com";
-    private String password = "password";
-    private String nickname = "nickname";
+	private String email = "email@email.com";
+	private String password = "password";
+	private String nickname = "nickname";
 
-    @BeforeEach
-    void setUp() {
-        member = Member.builder()
-            .email(email)
-            .password(password)
-            .nickname(nickname)
-            .build();
-    }
+	@BeforeEach
+	void setUp() {
+		member = Member.builder()
+			.email(email)
+			.password(password)
+			.nickname(nickname)
+			.build();
+	}
 
-    @Test
-    @DisplayName("C: save")
-    void saveTest() {
-        // When
-        Member savedMember = memberRepository.save(member);
+	@Test
+	@DisplayName("C: save")
+	void saveTest() {
+		// When
+		Member savedMember = memberRepository.save(member);
 
-        // Then
-        assertThat(savedMember).isNotNull();
-        assertThat(savedMember.getMemberId()).isGreaterThan(0);
-    }
+		// Then
+		assertThat(savedMember).isNotNull();
+		assertThat(savedMember.getMemberId()).isGreaterThan(0);
+	}
 
-    @Test
-    @DisplayName("R: findAll")
-    void findByAllTest() {
-        // Given
-        String email1 = "email1@email1.com";
-        String password1 = "password1";
-        String nickname1 = "nickname1";
-        Member member1 = Member.builder()
-            .email(email1)
-            .password(password1)
-            .nickname(nickname1)
-            .build();
-        
-        memberRepository.save(member);
-        memberRepository.save(member1);
+	@Test
+	@DisplayName("R: findAll")
+	void findByAllTest() {
+		// Given
+		String email1 = "email1@email1.com";
+		String password1 = "password1";
+		String nickname1 = "nickname1";
+		Member member1 = Member.builder()
+			.email(email1)
+			.password(password1)
+			.nickname(nickname1)
+			.build();
+		
+		memberRepository.save(member);
+		memberRepository.save(member1);
 
-        // When
-        List<Member> memberList = memberRepository.findAll();
+		// When
+		List<Member> memberList = memberRepository.findAll();
 
-        // Then
-        assertThat(memberList).isNotNull();
-        assertThat(memberList.size()).isEqualTo(2);
-    }
+		// Then
+		assertThat(memberList).isNotNull();
+		assertThat(memberList.size()).isEqualTo(2);
+	}
 
-    @Test
-    @DisplayName("R: findAllPage")
-    void findAllPageTest() {
-        // Given
-        String email1 = "email1@email1.com";
-        String password1 = "password1";
-        String nickname1 = "nickname1";
-        Member member1 = Member.builder()
-            .email(email1)
-            .password(password1)
-            .nickname(nickname1)
-            .build();
-        
-        memberRepository.save(member);
-        memberRepository.save(member1);
+	@Test
+	@DisplayName("R: findAllPage")
+	void findAllPageTest() {
+		// Given
+		String email1 = "email1@email1.com";
+		String password1 = "password1";
+		String nickname1 = "nickname1";
+		Member member1 = Member.builder()
+			.email(email1)
+			.password(password1)
+			.nickname(nickname1)
+			.build();
+		
+		memberRepository.save(member);
+		memberRepository.save(member1);
 
-        // When
-        Page<Member> memberPage = memberRepository.findAll(PageRequest.of(0, 10));
+		// When
+		Page<Member> memberPage = memberRepository.findAll(PageRequest.of(0, 10));
 
-        // Then
-        assertThat(memberPage).isNotNull();
-        assertThat(memberPage.getTotalElements()).isEqualTo(2);
-        assertThat(memberPage.getTotalPages()).isEqualTo(1);
-        assertThat(memberPage.getSize()).isEqualTo(10);
-        assertThat(memberPage.getContent()).hasSize(2);
-    }
+		// Then
+		assertThat(memberPage).isNotNull();
+		assertThat(memberPage.getTotalElements()).isEqualTo(2);
+		assertThat(memberPage.getTotalPages()).isEqualTo(1);
+		assertThat(memberPage.getSize()).isEqualTo(10);
+		assertThat(memberPage.getContent()).hasSize(2);
+	}
 
-    @Test
-    @DisplayName("R: findById")
-    void findByIdTest() {
-        // Given
-        memberRepository.save(member);
+	@Test
+	@DisplayName("R: findById")
+	void findByIdTest() {
+		// Given
+		memberRepository.save(member);
 
-        // When
-        Member foundMember = memberRepository.findById(member.getMemberId()).orElse(null);
+		// When
+		Member foundMember = memberRepository.findById(member.getMemberId()).orElse(null);
 
-        // Then
-        assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
-        assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
-    }
+		// Then
+		assertThat(foundMember).isNotNull();
+		assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
+		assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
+		assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
+		assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
+	}
 
-    // findByEmail
-    @Test
-    @DisplayName("R: findByEmail")
-    void findByEmailTest() {
-        // Given
-        memberRepository.save(member);
+	// findByEmail
+	@Test
+	@DisplayName("R: findByEmail")
+	void findByEmailTest() {
+		// Given
+		memberRepository.save(member);
 
-        // When
-        Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
+		// When
+		Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
 
-        // Then
-        assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
-        assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
-    }
+		// Then
+		assertThat(foundMember).isNotNull();
+		assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
+		assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
+		assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
+		assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
+	}
 
-    // findByNickname
-    @Test
-    @DisplayName("R: findByNickname")
-    void findByNicknameTest() {
-        // Given
-        memberRepository.save(member);
+	// findByNickname
+	@Test
+	@DisplayName("R: findByNickname")
+	void findByNicknameTest() {
+		// Given
+		memberRepository.save(member);
 
-        // When
-        Member foundMember = memberRepository.findByNickname(member.getNickname()).orElse(null);
+		// When
+		Member foundMember = memberRepository.findByNickname(member.getNickname()).orElse(null);
 
-        // Then
-        assertThat(foundMember).isNotNull();
-        assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
-        assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
-        assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
-    }
+		// Then
+		assertThat(foundMember).isNotNull();
+		assertThat(foundMember.getMemberId()).isEqualTo(member.getMemberId());
+		assertThat(foundMember.getEmail()).isEqualTo(member.getEmail());
+		assertThat(foundMember.getPassword()).isEqualTo(member.getPassword());
+		assertThat(foundMember.getNickname()).isEqualTo(member.getNickname());
+	}
 
-    @Test
-    @DisplayName("U: update")
-    void updateTest() {
-        // Given
-        String updateNickname = "updateNickname";
-        memberRepository.save(member);
+	@Test
+	@DisplayName("U: update")
+	void updateTest() {
+		// Given
+		String updateNickname = "updateNickname";
+		memberRepository.save(member);
 
-        // When
-        Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
-        assertThat(savedMember).isNotNull();
+		// When
+		Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
+		assertThat(savedMember).isNotNull();
 
-        savedMember.update(updateNickname);
+		savedMember.update(updateNickname);
 
-        Member updatedMember = memberRepository.save(savedMember);
+		Member updatedMember = memberRepository.save(savedMember);
 
-        // Then
-        assertThat(updatedMember).isNotNull();
-        assertThat(updatedMember.getNickname()).isEqualTo(updateNickname);
-    }
+		// Then
+		assertThat(updatedMember).isNotNull();
+		assertThat(updatedMember.getNickname()).isEqualTo(updateNickname);
+	}
 
-    @Test
-    @DisplayName("U: updatePassword")
-    void updatePasswordTest() {
-        // Given
-        String updatePassword = "updatePassword";
-        memberRepository.save(member);
+	@Test
+	@DisplayName("U: updatePassword")
+	void updatePasswordTest() {
+		// Given
+		String updatePassword = "updatePassword";
+		memberRepository.save(member);
 
-        // When
-        Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
-        assertThat(savedMember).isNotNull();
+		// When
+		Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
+		assertThat(savedMember).isNotNull();
 
-        savedMember.updatePassword(updatePassword);
+		savedMember.updatePassword(updatePassword);
 
-        Member updatedMember = memberRepository.save(savedMember);
+		Member updatedMember = memberRepository.save(savedMember);
 
-        // Then
-        assertThat(updatedMember).isNotNull();
-        assertThat(updatedMember.getPassword()).isEqualTo(updatePassword);
-    }
+		// Then
+		assertThat(updatedMember).isNotNull();
+		assertThat(updatedMember.getPassword()).isEqualTo(updatePassword);
+	}
 
-    @Test
-    @DisplayName("D: deleteById")
-    void deleteByIdTest() {
-        // Given
-        memberRepository.save(member);
+	@Test
+	@DisplayName("D: deleteById")
+	void deleteByIdTest() {
+		// Given
+		memberRepository.save(member);
 
-        // When
-        memberRepository.deleteById(member.getMemberId());
-        Member deletedMember = memberRepository.findById(member.getMemberId()).orElse(null);
+		// When
+		memberRepository.deleteById(member.getMemberId());
+		Member deletedMember = memberRepository.findById(member.getMemberId()).orElse(null);
 
-        // Then
-        assertThat(deletedMember).isNull();
-    }
+		// Then
+		assertThat(deletedMember).isNull();
+	}
 }
