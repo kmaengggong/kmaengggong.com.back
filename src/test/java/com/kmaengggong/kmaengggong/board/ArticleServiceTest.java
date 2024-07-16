@@ -71,15 +71,14 @@ public class ArticleServiceTest {
 			.headerImage(headerImage1)
 			.build();
 
+		// When
 		articleService.save(articleSaveDTO);
 		articleService.save(articleSaveDTO1);
-
-		// When
-		List<ArticleFindDTO> articleList = articleService.findAll();
+		List<ArticleFindDTO> articles = articleService.findAll();
 
 		// Then
-		assertThat(articleList).isNotNull();
-		assertThat(articleList.size()).isEqualTo(2);
+		assertThat(articles).isNotNull();
+		assertThat(articles.size()).isEqualTo(2);
 	}
 
 	@Test
@@ -97,10 +96,9 @@ public class ArticleServiceTest {
 			.headerImage(headerImage1)
 			.build();
 
+		// When
 		articleService.save(articleSaveDTO);
 		articleService.save(articleSaveDTO1);
-
-		// When
 		Page<ArticleFindDTO> articlePage = articleService.findAll(PageRequest.of(0, 10));
 
 		// Then
@@ -114,10 +112,8 @@ public class ArticleServiceTest {
 	@Test
 	@DisplayName("R: findById")
 	void findByIdTest() {
-		// Given
-		articleFindDTO = articleService.save(articleSaveDTO);
-
 		// When
+		articleFindDTO = articleService.save(articleSaveDTO);
 		ArticleFindDTO foundArticle = articleService.findById(articleFindDTO.getArticleId());
 
 		// Then
@@ -136,9 +132,9 @@ public class ArticleServiceTest {
 		String updateTitle = "updateTitle";
 		String updateContent = "updateContent";
 		String updateHeaderImage = "updateHeaderImage";
-		articleFindDTO = articleService.save(articleSaveDTO);
 
 		// When
+		articleFindDTO = articleService.save(articleSaveDTO);
 		ArticleFindDTO savedArticleFindDTO = articleService.findById(articleFindDTO.getArticleId());
 		assertThat(savedArticleFindDTO).isNotNull();
 
@@ -148,8 +144,8 @@ public class ArticleServiceTest {
 			.content(updateContent)
 			.headerImage(updateHeaderImage)
 			.build();
+			
 		articleService.update(articleUpdateDTO);
-
 		ArticleFindDTO updatedArticleFindDTO = articleService.findById(articleUpdateDTO.getArticleId());
 
 		// Then
@@ -162,10 +158,8 @@ public class ArticleServiceTest {
 	@Test
 	@DisplayName("D: deleteById")
 	void deleteByIdTest() {
-		// Given
-		articleFindDTO = articleService.save(articleSaveDTO);
-
 		// When
+		articleFindDTO = articleService.save(articleSaveDTO);
 		articleService.deleteById(articleFindDTO.getArticleId());
 
 		// Then

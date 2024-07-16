@@ -65,10 +65,9 @@ public class ArticleRepositoryTest {
 			.headerImage(headerImage1)
 			.build();
 
+		// When
 		articleRepository.save(article);
 		articleRepository.save(article1);
-
-		// When
 		List<Article> articles = articleRepository.findAll();
 
 		// Then
@@ -91,10 +90,9 @@ public class ArticleRepositoryTest {
 			.headerImage(headerImage1)
 			.build();
 
+		// When
 		articleRepository.save(article);
 		articleRepository.save(article1);
-
-		// When
 		Page<Article> articlePage = articleRepository.findAll(PageRequest.of(0, 10));
 
 		// Then
@@ -108,10 +106,8 @@ public class ArticleRepositoryTest {
 	@Test
 	@DisplayName("R: findById")
 	void findByIdTest() {
-		// Given
-		articleRepository.save(article);
-
 		// When
+		articleRepository.save(article);
 		Article findArticle = articleRepository.findById(article.getArticleId()).orElse(null);
 
 		// Then
@@ -130,14 +126,13 @@ public class ArticleRepositoryTest {
 		String updateTitle = "updateTitle";
 		String updateContent = "updateContent";
 		String updateHeaderIamge = "updateHeaderImage";
-		articleRepository.save(article);
 
 		// When
+		articleRepository.save(article);
 		Article savedArticle = articleRepository.findById(article.getArticleId()).orElse(null);
 		assertThat(savedArticle).isNotNull();
 
 		savedArticle.update(updateTitle, updateContent, updateHeaderIamge);
-
 		Article updatedArticle = articleRepository.save(savedArticle);
 
 		// Then
@@ -150,10 +145,9 @@ public class ArticleRepositoryTest {
 	@Test
 	@DisplayName("D: deleteById")
 	void deleteByIdTest() {
-		// Given
+		// When
 		articleRepository.save(article);
 
-		// When
 		articleRepository.deleteById(article.getArticleId());
 		Article deletedArticle = articleRepository.findById(article.getArticleId()).orElse(null);
 

@@ -61,15 +61,14 @@ public class MemberRepositoryTest {
 			.nickname(nickname1)
 			.build();
 		
+		// When
 		memberRepository.save(member);
 		memberRepository.save(member1);
-
-		// When
-		List<Member> memberList = memberRepository.findAll();
+		List<Member> members = memberRepository.findAll();
 
 		// Then
-		assertThat(memberList).isNotNull();
-		assertThat(memberList.size()).isEqualTo(2);
+		assertThat(members).isNotNull();
+		assertThat(members.size()).isEqualTo(2);
 	}
 
 	@Test
@@ -84,11 +83,10 @@ public class MemberRepositoryTest {
 			.password(password1)
 			.nickname(nickname1)
 			.build();
-		
-		memberRepository.save(member);
-		memberRepository.save(member1);
 
 		// When
+		memberRepository.save(member);
+		memberRepository.save(member1);
 		Page<Member> memberPage = memberRepository.findAll(PageRequest.of(0, 10));
 
 		// Then
@@ -102,10 +100,8 @@ public class MemberRepositoryTest {
 	@Test
 	@DisplayName("R: findById")
 	void findByIdTest() {
-		// Given
-		memberRepository.save(member);
-
 		// When
+		memberRepository.save(member);
 		Member foundMember = memberRepository.findById(member.getMemberId()).orElse(null);
 
 		// Then
@@ -120,10 +116,8 @@ public class MemberRepositoryTest {
 	@Test
 	@DisplayName("R: findByEmail")
 	void findByEmailTest() {
-		// Given
-		memberRepository.save(member);
-
 		// When
+		memberRepository.save(member);
 		Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
 
 		// Then
@@ -138,10 +132,8 @@ public class MemberRepositoryTest {
 	@Test
 	@DisplayName("R: findByNickname")
 	void findByNicknameTest() {
-		// Given
-		memberRepository.save(member);
-
 		// When
+		memberRepository.save(member);
 		Member foundMember = memberRepository.findByNickname(member.getNickname()).orElse(null);
 
 		// Then
@@ -157,14 +149,12 @@ public class MemberRepositoryTest {
 	void updateTest() {
 		// Given
 		String updateNickname = "updateNickname";
-		memberRepository.save(member);
-
 		// When
+		memberRepository.save(member);
 		Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
 		assertThat(savedMember).isNotNull();
 
 		savedMember.update(updateNickname);
-
 		Member updatedMember = memberRepository.save(savedMember);
 
 		// Then
@@ -177,14 +167,13 @@ public class MemberRepositoryTest {
 	void updatePasswordTest() {
 		// Given
 		String updatePassword = "updatePassword";
-		memberRepository.save(member);
 
 		// When
+		memberRepository.save(member);
 		Member savedMember = memberRepository.findById(member.getMemberId()).orElse(null);
 		assertThat(savedMember).isNotNull();
 
 		savedMember.updatePassword(updatePassword);
-
 		Member updatedMember = memberRepository.save(savedMember);
 
 		// Then
@@ -195,10 +184,8 @@ public class MemberRepositoryTest {
 	@Test
 	@DisplayName("D: deleteById")
 	void deleteByIdTest() {
-		// Given
-		memberRepository.save(member);
-
 		// When
+		memberRepository.save(member);
 		memberRepository.deleteById(member.getMemberId());
 		Member deletedMember = memberRepository.findById(member.getMemberId()).orElse(null);
 

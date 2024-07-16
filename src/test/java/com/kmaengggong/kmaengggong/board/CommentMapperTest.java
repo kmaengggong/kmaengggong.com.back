@@ -2,21 +2,20 @@ package com.kmaengggong.kmaengggong.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.kmaengggong.kmaengggong.board.domain.Comment;
 import com.kmaengggong.kmaengggong.board.domain.CommentMapper;
-
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 
 @MybatisTest
 @ExtendWith(SpringExtension.class)
@@ -68,15 +67,41 @@ public class CommentMapperTest {
 			.content(content1)
 			.build();
 		
+		// When
 		commentMapper.save(comment);
 		commentMapper.save(comment1);
-
-		// When
 		List<Comment> comments = commentMapper.findAll();
+		List<String> expectedCommentContents = Arrays.asList(comment.getContent(), comment1.getContent());
 		
 		// Then
 		assertThat(comments).isNotNull();
 		assertThat(comments.size()).isEqualTo(2);
+		assertThat(comments.stream().map(Comment::getContent))
+			.containsExactlyInAnyOrderElementsOf(expectedCommentContents);
+	}
+
+	@Test
+	@DisplayName("findAllByArticleId")
+	void findAllByArticleIdTest() {
+		// Given
+		Long authorId1 = 2L;
+		Long articleId1 = 98L;
+		String content1 = "content1";
+		Comment comment1 = Comment.builder()
+			.authorId(authorId1)
+			.articleId(articleId1)
+			.content(content1)
+			.build();
+		
+		// When
+		commentMapper.save(comment);
+		commentMapper.save(comment1);
+		List<Comment> comments = commentMapper.findAllByArticleId(articleId);
+		
+		// Then
+		assertThat(comments).isNotNull();
+		assertThat(comments.size()).isEqualTo(1);
+		assertThat(comments.get(0).getContent()).isEqualTo(content);
 	}
 
 	@Test
@@ -88,13 +113,14 @@ public class CommentMapperTest {
 
 		// When
 		Comment savedComment = commentMapper.findLatest();
+		assertThat(savedComment).isNotNull();
+
 		Comment updateComment = Comment.builder()
 			.commentId(savedComment.getCommentId())
 			.content(updateContent)
 			.build();
 
 		commentMapper.update(updateComment);
-
 		Comment updatedComment = commentMapper.findById(savedComment.getCommentId());
 
 		// Then
@@ -110,6 +136,8 @@ public class CommentMapperTest {
 
 		// When
 		Comment savedComment = commentMapper.findLatest();
+		assertThat(savedComment).isNotNull();
+
 		commentMapper.deleteById(savedComment.getCommentId());
 		Comment deletedComment = commentMapper.findById(savedComment.getCommentId());
 

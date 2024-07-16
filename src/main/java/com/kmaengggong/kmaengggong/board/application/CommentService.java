@@ -4,14 +4,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.kmaengggong.kmaengggong.board.domain.Comment;
+import com.kmaengggong.kmaengggong.board.application.dto.CommentFindDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.CommentSaveDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.CommentUpdateDTO;
 
 @Service
 public interface CommentService {
-	List<Comment> findAll();
-	List<Comment> findAllByArticleId(Long articleId);
-	Comment findById(Long commentId);
-	void save(Comment comment);
-	void update(Comment comment);
-	void delete(Long commentId);
+	void save(CommentSaveDTO commentSaveDTO);
+	List<CommentFindDTO> findAll();
+	List<CommentFindDTO> findAllByArticleId(Long articleId);
+	CommentFindDTO findById(Long commentId);
+	CommentFindDTO findLatest();
+	void update(CommentUpdateDTO commentUpdateDTO);
+	void deleteById(Long commentId);
 }

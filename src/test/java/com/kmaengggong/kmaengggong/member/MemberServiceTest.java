@@ -68,15 +68,14 @@ public class MemberServiceTest {
 			.nickname(nickname1)
 			.build();
 
+		// When
 		memberService.save(memberSaveDTO);
 		memberService.save(memberSaveDTO1);
-
-		// When
-		List<MemberFindDTO> memberList = memberService.findAll();
+		List<MemberFindDTO> members = memberService.findAll();
 
 		// Then
-		assertThat(memberList).isNotNull();
-		assertThat(memberList.size()).isEqualTo(2);
+		assertThat(members).isNotNull();
+		assertThat(members.size()).isEqualTo(2);
 	}
 
 	@Test
@@ -92,10 +91,9 @@ public class MemberServiceTest {
 			.nickname(nickname1)
 			.build();
 
+		// When
 		memberService.save(memberSaveDTO);
 		memberService.save(memberSaveDTO1);
-
-		// When
 		Page<MemberFindDTO> memberPage = memberService.findAll(PageRequest.of(0, 10));
 
 		// Then
@@ -109,10 +107,8 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("R: findById")
 	void findByIdTest() {
-		// Given
-		memberFindDTO = memberService.save(memberSaveDTO);
-
 		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 		MemberFindDTO foundMember = memberService.findById(memberFindDTO.getMemberId());
 
 		// Then
@@ -125,10 +121,8 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("R: findByEmail")
 	void findByEmailTest() {
-		// Given
-		memberFindDTO = memberService.save(memberSaveDTO);
-
 		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 		MemberFindDTO foundMember = memberService.findByEmail(memberFindDTO.getEmail());
 
 		// Then
@@ -141,10 +135,8 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("R: findByNickname")
 	void findByNicknameTest() {
-		// Given
-		memberFindDTO = memberService.save(memberSaveDTO);
-
 		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 		MemberFindDTO foundMember = memberService.findByNickname(memberFindDTO.getNickname());
 
 		// Then
@@ -159,9 +151,9 @@ public class MemberServiceTest {
 	void updateTest() {
 		// Given
 		String updateNickname = "updateNickname";
-		memberFindDTO = memberService.save(memberSaveDTO);
 
 		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 		MemberFindDTO savedMemberFindDTO = memberService.findById(memberFindDTO.getMemberId());
 		assertThat(savedMemberFindDTO).isNotNull();
 
@@ -183,9 +175,9 @@ public class MemberServiceTest {
 	void updatePasswordTest() {
 		// Given
 		String updatePassword = "updatePassword";
-		memberFindDTO = memberService.save(memberSaveDTO);
 
 		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 		MemberFindDTO savedMemberFindDTO = memberService.findById(memberFindDTO.getMemberId());
 		assertThat(savedMemberFindDTO).isNotNull();
 
@@ -193,8 +185,8 @@ public class MemberServiceTest {
 			.memberId(savedMemberFindDTO.getMemberId())
 			.password(updatePassword)
 			.build();
+			
 		memberService.updatePassword(memberUpdatePasswordDTO);
-
 		MemberFindDTO updatedMemberFindDTO = memberService.findById(memberUpdatePasswordDTO.getMemberId());
 
 		// Then
@@ -205,10 +197,8 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("D: deleteById")
 	void deleteByIdTest() {
-		// Given
-		memberFindDTO = memberService.save(memberSaveDTO);
-
 		// When
+		memberFindDTO = memberService.save(memberSaveDTO);
 		memberService.deleteById(memberFindDTO.getMemberId());
 		
 		// Then
