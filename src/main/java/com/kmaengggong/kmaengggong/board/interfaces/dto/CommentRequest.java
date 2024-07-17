@@ -1,5 +1,8 @@
 package com.kmaengggong.kmaengggong.board.interfaces.dto;
 
+import com.kmaengggong.kmaengggong.board.application.dto.CommentSaveDTO;
+import com.kmaengggong.kmaengggong.board.application.dto.CommentUpdateDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +16,20 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentRequest {
 	private Long authorId;
-	private String title;
+	private Long articleId;
 	private String content;
-	private String headerImage;
+
+	public static CommentSaveDTO toSaveDTO(CommentRequest commentRequest) {
+		return CommentSaveDTO.builder()
+			.authorId(commentRequest.getAuthorId())
+			.articleId(commentRequest.getArticleId())
+			.content(commentRequest.getContent())
+			.build();
+	}
+
+	public static CommentUpdateDTO toUpdateDTO(CommentRequest commentRequest) {
+		return CommentUpdateDTO.builder()
+			.content(commentRequest.getContent())
+			.build();
+	}
 }

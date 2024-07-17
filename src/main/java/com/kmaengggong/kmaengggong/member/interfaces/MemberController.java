@@ -52,8 +52,6 @@ public class MemberController extends CommonController {
 		List<MemberResponse> memberRseponses = memberPage.getContent().stream()
 			.map(MemberResponse::toResponse)
 			.collect(Collectors.toList());
-		// Page<MemberResponse> memberResponsePage = new PageImpl<>(
-		// 	memberRseponses, pageable, memberPage.getTotalElements());
 		return ResponseEntity.ok(memberRseponses);
 	}
 

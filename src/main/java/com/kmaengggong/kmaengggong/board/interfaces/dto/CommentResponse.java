@@ -20,7 +20,6 @@ public class CommentResponse {
 	private Long authorId;
 	private Long articleId;
 	private String content;
-	private Long likeCount;
 	private LocalDateTime createdAt;
 
 	public static CommentResponse toResponse(CommentFindDTO commentFindDTO) {
@@ -29,7 +28,6 @@ public class CommentResponse {
 			.authorId(commentFindDTO.getAuthorId())
 			.articleId(commentFindDTO.getArticleId())
 			.content(commentFindDTO.getContent())
-			.likeCount(commentFindDTO.getLikeCount())
 			.createdAt(commentFindDTO.getCreatedAt())
 			.build();
 	}

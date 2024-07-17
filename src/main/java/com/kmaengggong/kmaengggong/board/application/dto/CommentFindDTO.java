@@ -20,7 +20,6 @@ public class CommentFindDTO {
 	private Long authorId;
 	private Long articleId;
 	private String content;
-	private Long likeCount;
 	private LocalDateTime createdAt;
 
 	public static CommentFindDTO toDTO(Comment comment) {
@@ -29,7 +28,6 @@ public class CommentFindDTO {
 			.authorId(comment.getAuthorId())
 			.articleId(comment.getArticleId())
 			.content(comment.getContent())
-			.likeCount(comment.getLikeCount())
 			.createdAt(comment.getCreatedAt())
 			.build();
 	}
@@ -40,7 +38,6 @@ public class CommentFindDTO {
 			.authorId(commentFindDTO.getAuthorId())
 			.articleId(commentFindDTO.getArticleId())
 			.content(commentFindDTO.getContent())
-			.likeCount(commentFindDTO.getLikeCount())
 			.createdAt(commentFindDTO.getCreatedAt())
 			.build();
 	}

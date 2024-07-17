@@ -13,15 +13,20 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Comment implements Likeable {
 	private Long commentId;
 	private Long authorId;
 	private Long articleId;
 	private String content;
-	private Long likeCount;
 	private LocalDateTime createdAt;
 
-	public void updateLike() {
-		this.likeCount += 1;
+	@Override
+	public Long getId() {
+		return commentId;
+	}
+
+	@Override
+	public String getType() {
+		return "Comment";
 	}
 }

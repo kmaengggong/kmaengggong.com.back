@@ -1,14 +1,16 @@
 package com.kmaengggong.kmaengggong.common.interfaces;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class CommonController {
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException e) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	protected Long generateGuestId(HttpServletRequest request) {
+		String remoteAddr = getClientIp(request);
+		return (long) remoteAddr.hashCode();
+	}
+
+	protected String getClientIp(HttpServletRequest request) {
+		String remoteAddr = request.getHeader("X-FOWARDED-FOR");
+		if(remoteAddr == null || "".equals(remoteAddr)) remoteAddr = request.getRemoteAddr();
+		return remoteAddr;
 	}
 }

@@ -21,7 +21,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Article {
+public class Article implements Likeable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long articleId;
@@ -56,5 +56,15 @@ public class Article {
 		if(content != null) this.content = content;
 		if(headerImage != null) this.headerImage = headerImage;
 		this.updatedAt = LocalDateTime.now();
+	}
+
+	@Override
+	public Long getId() {
+		return articleId;
+	}
+
+	@Override
+	public String getType() {
+		return "Article";
 	}
 }

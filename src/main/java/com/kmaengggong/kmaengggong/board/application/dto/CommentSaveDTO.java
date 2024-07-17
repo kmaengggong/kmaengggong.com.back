@@ -19,7 +19,6 @@ public class CommentSaveDTO {
 	private Long authorId;
 	private Long articleId;
 	private String content;
-	private Long likeCount;
 	private LocalDateTime createdAt;
 
 	public static Comment toEntity(CommentSaveDTO commentSaveDTO) {
@@ -27,7 +26,6 @@ public class CommentSaveDTO {
 			.authorId(commentSaveDTO.getAuthorId())
 			.articleId(commentSaveDTO.getArticleId())
 			.content(commentSaveDTO.getContent())
-			.likeCount(commentSaveDTO.getLikeCount())
 			.createdAt(commentSaveDTO.getCreatedAt())
 			.build();
 	}

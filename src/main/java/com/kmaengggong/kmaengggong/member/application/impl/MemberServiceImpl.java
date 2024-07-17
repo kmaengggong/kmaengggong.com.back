@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 import com.kmaengggong.kmaengggong.member.application.MemberService;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
@@ -18,9 +19,6 @@ import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
 
 import jakarta.transaction.Transactional;
-
-import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
