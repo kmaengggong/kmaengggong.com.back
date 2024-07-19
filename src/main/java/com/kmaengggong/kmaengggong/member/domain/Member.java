@@ -2,6 +2,8 @@ package com.kmaengggong.kmaengggong.member.domain;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,5 +47,9 @@ public class Member {
 
 	public void updatePassword(String password) {
 		if(password != null) this.password = password;
+	}
+
+	public void passwordEncode(BCryptPasswordEncoder bCryptPasswordEncoder){
+		this.password = bCryptPasswordEncoder.encode(this.password);
 	}
 }

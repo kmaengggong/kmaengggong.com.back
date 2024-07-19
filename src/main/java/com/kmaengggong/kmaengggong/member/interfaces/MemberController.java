@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 import com.kmaengggong.kmaengggong.member.application.MemberService;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberSaveDTO;
@@ -25,7 +26,6 @@ import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdateDTO;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberUpdatePasswordDTO;
 import com.kmaengggong.kmaengggong.member.interfaces.dto.MemberRequest;
 import com.kmaengggong.kmaengggong.member.interfaces.dto.MemberResponse;
-import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 
 import lombok.RequiredArgsConstructor;
 
@@ -81,5 +81,17 @@ public class MemberController extends CommonController {
 	public ResponseEntity<Void> deleteById(@PathVariable("memberId") Long memberId) {
 		memberService.deleteById(memberId);
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam("email") String email) {
+		boolean isDuplicate = memberService.isEmailDuplicate(email);
+		return ResponseEntity.ok(isDuplicate);
+	}
+
+	@GetMapping("/nickname")
+	public ResponseEntity<Boolean> checkNicknameDuplicate(@RequestParam("nickname") String nickname) {
+		boolean isDuplicate = memberService.isNicknameDuplicate(nickname);
+		return ResponseEntity.ok(isDuplicate);
 	}
 }

@@ -1,7 +1,9 @@
 // package com.kmaengggong.kmaengggong.board;
 
 // import static org.assertj.core.api.Assertions.assertThat;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 // import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 // import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 // import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 // import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +25,7 @@
 
 // import com.fasterxml.jackson.databind.ObjectMapper;
 // import com.jayway.jsonpath.JsonPath;
+// import com.kmaengggong.kmaengggong.board.interfaces.dto.ArticleRequest;
 // import com.kmaengggong.kmaengggong.board.interfaces.dto.CommentRequest;
 // import com.kmaengggong.kmaengggong.common.CommonTest;
 
@@ -39,17 +42,45 @@
 //     private CommentRequest commentRequest;
 
 // 	private Long authorId = 1L;
-// 	private Long articleId = 99L;
+// 	private Long articleId;
 // 	private String content = "content";
 
+//     private ArticleRequest articleRequest;
+// 	private String title = "title";
+// 	private String headerImage = "headerImage";
+
 //     @BeforeEach
-//     void setUp() {
+//     void setUp() throws Exception {
 //         objectMapper = new ObjectMapper();
+
+//         articleRequest = ArticleRequest.builder()
+//             .authorId(authorId)
+//             .title(title)
+//             .content(content)
+//             .headerIamge(headerImage)
+//             .build();
+//         String articleRequestJson = objectMapper.writeValueAsString(articleRequest);
+//         MvcResult result = mockMvc.perform(post("/board")
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(articleRequestJson))
+//             .andReturn();
+//         String uri = result.getResponse().getHeader("Location");
+//         articleId = Long.parseLong(uri.substring(uri.lastIndexOf("/")+1));
+
 //         commentRequest = CommentRequest.builder()
 //             .authorId(authorId)
 //             .articleId(articleId)
 //             .content(content)
 //             .build();
+//     }
+
+//     String saveFunc(String uri, String requestJson) throws Exception {
+//         MvcResult result = mockMvc.perform(post(uri)
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(requestJson))
+//             .andExpect(status().isCreated())
+//             .andReturn();
+//         return result.getResponse().getHeader("Location");
 //     }
 
 //     @Test
@@ -60,12 +91,7 @@
 //         String commentRequestJson = objectMapper.writeValueAsString(commentRequest);
 
 //         // When
-//         MvcResult result = mockMvc.perform(post("/comment")
-//             .contentType(MediaType.APPLICATION_JSON)
-//             .content(commentRequestJson))
-//             .andExpect(status().isCreated())
-//             .andReturn();
-//         String uri = result.getResponse().getHeader("Location");
+//         String uri = saveFunc( "/comment", commentRequestJson);
 
 //         // Then
 //         mockMvc.perform(get(uri))
@@ -167,5 +193,188 @@
 //         assertThat(jsonAuthorIds).containsExactlyInAnyOrderElementsOf(expectedAuthorIds);
 //         assertThat(jsonArticleIds).containsExactlyInAnyOrderElementsOf(expectedArticleIds);
 //         assertThat(jsonContents).containsExactlyInAnyOrderElementsOf(expectedContents);
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("findAllByArticleIdNotExistsArticle")
+//     void findAllByArticleIdNotExistsArticleTest() throws Exception {
+
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: findByIdNotExists")
+//     void findByIdNotExistsTest() throws Exception {
+//         // Given
+//         String uri = "/comment/9999";
+
+//         // Then
+//         mockMvc.perform(get(uri))
+//             .andExpect(status().isNotFound());
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: update")
+//     void updateTest() throws Exception {
+//         // Given
+//         String updateContent = "updateContent";
+//         String commentRequestJson = objectMapper.writeValueAsString(commentRequest);
+
+//         // When
+//         MvcResult result = mockMvc.perform(post("/comment")
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJson))
+//             .andExpect(status().isCreated())
+//             .andReturn();
+//         String uri = result.getResponse().getHeader("Location");
+
+//         CommentRequest commentRequestUpdate = CommentRequest.builder()
+//             .content(updateContent)
+//             .build();
+//         String commentRequestJsonUpdate = objectMapper.writeValueAsString(commentRequestUpdate);
+
+//         mockMvc.perform(patch(uri)
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJsonUpdate))
+//             .andExpect(status().isNoContent());
+        
+//         // Then
+//         mockMvc.perform(get(uri))
+//             .andExpect(status().isOk())
+//             .andExpect(jsonPath("$.content").value(updateContent));
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: updateNotExists")
+//     void updateNotExistsTest() throws Exception {
+//         // Given
+//         String updateContent = "updateContent";
+//         String uri = "/comment/9999";
+
+//         // When
+//         CommentRequest commentRequestUpdate = CommentRequest.builder()
+//             .content(updateContent)
+//             .build();
+//         String commentRequestJsonUpdate = objectMapper.writeValueAsString(commentRequestUpdate);
+
+//         // Then
+//         mockMvc.perform(patch(uri)
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJsonUpdate))
+//             .andExpect(status().isNotFound());
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: updateNullValue")
+//     void updateNullValueTest() throws Exception {
+//         // Given
+//         String updateContent = null;
+//         String commentRequestJson = objectMapper.writeValueAsString(commentRequest);
+
+//         // When
+//         MvcResult result = mockMvc.perform(post("/comment")
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJson))
+//             .andExpect(status().isCreated())
+//             .andReturn();
+//         String uri = result.getResponse().getHeader("Location");
+
+//         CommentRequest commentRequestUpdate = CommentRequest.builder()
+//             .content(updateContent)
+//             .build();
+//         String commentRequestJsonUpdate = objectMapper.writeValueAsString(commentRequestUpdate);
+
+//         mockMvc.perform(patch(uri)
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJsonUpdate))
+//             .andExpect(status().isNoContent());
+        
+//         // Then
+//         mockMvc.perform(get(uri))
+//             .andExpect(status().isOk())
+//             .andExpect(jsonPath("$.content").value(content));
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: deleteById")
+//     void deleteByIdTest() throws Exception {
+//         // Given
+//         String commentRequestJson = objectMapper.writeValueAsString(commentRequest);
+
+//         // When
+//         MvcResult result = mockMvc.perform(post("/comment")
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJson))
+//             .andExpect(status().isOk())
+//             .andReturn();
+//         String uri = result.getResponse().getHeader("Location");
+
+//         mockMvc.perform(delete(uri))
+//             .andExpect(status().isNoContent());
+        
+//         // Then
+//         mockMvc.perform(get(uri))
+//             .andExpect(status().isNotFound());
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: deleteByIdNotExists")
+//     void deleteByIdNotExistsTest() throws Exception {
+//         // Given
+//         String uri = "/comment/9999";
+
+//         // Then
+//         mockMvc.perform(delete(uri))
+//             .andExpect(status().isNotFound());
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: likeCommentAndGetCommentLikes")
+//     void likeCommentAndGetCommentLikesTest() throws Exception {
+//         // Given
+//         String commentRequestJson = objectMapper.writeValueAsString(commentRequest);
+
+//         // When
+//         MvcResult result = mockMvc.perform(post("/comment")
+//             .contentType(MediaType.APPLICATION_JSON)
+//             .content(commentRequestJson))
+//             .andExpect(status().isOk())
+//             .andReturn();
+//         String uri = result.getResponse().getHeader("Location");
+//         uri += "/like";
+
+//         // Then
+
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: likeCommentAndGetCommentLikesNotExistsComment")
+//     void likeCommentAndGetCommentLikesNotExistsCommentTest() throws Exception {
+//         // Given
+//         String uri = "/comment/9999/like";
+
+//         // Then
+//         mockMvc.perform(get(uri))
+//             .andExpect(status().isNotFound());
+
+//         mockMvc.perform(post(uri))
+//             .andExpect(status().isNotFound());
+        
+//     }
+
+//     @Test
+//     @Transactional
+//     @DisplayName("R: likeCommentAndGetCommentLikesDuplicated")
+//     void likeCommentAndGetCommentLikesDuplicatedTest() throws Exception {
+//         // Given
+        
 //     }
 // }

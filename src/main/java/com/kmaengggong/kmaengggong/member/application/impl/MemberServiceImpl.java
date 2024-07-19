@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kmaengggong.kmaengggong.common.exception.AlreadyExistsException;
 import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 import com.kmaengggong.kmaengggong.member.application.MemberService;
 import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
@@ -25,11 +27,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService { 
 	private final MemberRepository memberRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	@Transactional
 	public MemberFindDTO save(MemberSaveDTO memberSaveDTO) {
+		memberRepository.findByEmail(memberSaveDTO.getEmail())
+			.ifPresent((value) -> {throw new AlreadyExistsException("Email already exists");});
+		memberRepository.findByNickname(memberSaveDTO.getNickname())
+			.ifPresent((value) -> {throw new AlreadyExistsException("Nickname already exists");});
+
 		Member member = MemberSaveDTO.toEntity(memberSaveDTO);
+		member.passwordEncode(bCryptPasswordEncoder);
 		member = memberRepository.save(member);
 		return MemberFindDTO.toDTO(member);
 	}
@@ -122,5 +131,15 @@ public class MemberServiceImpl implements MemberService {
 			.orElseThrow(() -> new ResourceNotFoundException("Member not found"));
 		if(member.getPassword().equals(password)) return true;
 		else return false;
+	}
+
+	@Override
+	public boolean isEmailDuplicate(String email) {
+		return memberRepository.existsByEmail(email);
+	}
+
+	@Override
+	public boolean isNicknameDuplicate(String nickname) {
+		return memberRepository.existsByNickname(nickname);
 	}
 }

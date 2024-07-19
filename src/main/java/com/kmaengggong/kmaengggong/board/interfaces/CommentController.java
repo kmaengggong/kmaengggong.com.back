@@ -49,17 +49,12 @@ public class CommentController extends CommonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponse>> findAll() {
-        List<CommentFindDTO> commentDtos = commentService.findAll();
-        List<CommentResponse> commentResponses = commentDtos.stream()
-            .map(CommentResponse::toResponse)
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(commentResponses);
-    }
+    public ResponseEntity<List<CommentResponse>> findAll(@RequestParam(value = "articleId", required = false) Long articleId) {
+        List<CommentFindDTO> commentDtos;
 
-    @GetMapping
-    public ResponseEntity<List<CommentResponse>> findAllByArticleId(@RequestParam("articleId") Long articleId) {
-        List<CommentFindDTO> commentDtos = commentService.findAllByArticleId(articleId);
+        if(articleId == null) commentDtos = commentService.findAll();
+        else commentDtos = commentService.findAllByArticleId(articleId);
+
         List<CommentResponse> commentResponses = commentDtos.stream()
             .map(CommentResponse::toResponse)
             .collect(Collectors.toList());

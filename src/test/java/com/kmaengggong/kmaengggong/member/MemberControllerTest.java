@@ -197,8 +197,11 @@ public class MemberControllerTest {
 	@Test
 	@DisplayName("R: findByIdNotExists")
 	void findByIdNotExistsTest() throws Exception {
+		// Given
+		String uri = "/member/9999";
+
 		// Then
-		mockMvc.perform(get("/member/9999"))
+		mockMvc.perform(get(uri))
 			.andExpect(status().isNotFound());
 	}
 

@@ -24,7 +24,6 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			LIKE_COUNT AS likeCount,
 			CREATED_AT AS createdAt
 		FROM
 			COMMENT
@@ -38,7 +37,6 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			LIKE_COUNT AS likeCount,
 			CREATED_AT AS createdAt
 		FROM
 			COMMENT
@@ -54,7 +52,6 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			LIKE_COUNT AS likeCount,
 			CREATED_AT AS createdAt
 		FROM
 			COMMENT
@@ -68,7 +65,6 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			LIKE_COUNT AS likeCount,
 			CREATED_AT AS createdAt
 		FROM
 			COMMENT
@@ -80,8 +76,11 @@
 	<update id="update" parameterType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		UPDATE
 			COMMENT
-		SET
-			CONTENT = #{comment.content}
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="comment.content != null">
+				CONTENT = #{comment.content},
+			</if>
+		</trim>
 		WHERE
 			COMMENT_ID = #{comment.commentId}
 	</update>

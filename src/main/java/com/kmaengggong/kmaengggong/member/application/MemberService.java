@@ -25,4 +25,6 @@ public interface MemberService {
 	void deleteById(Long memberId);
 
 	boolean passwordCheck(Long memberId, String password);
+	boolean isEmailDuplicate(String email);
+	boolean isNicknameDuplicate(String nickname);
 }
