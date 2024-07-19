@@ -9,7 +9,6 @@ import com.kmaengggong.kmaengggong.member.application.AuthService;
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
 import com.kmaengggong.kmaengggong.member.interfaces.dto.AuthRequest;
-import com.kmaengggong.kmaengggong.member.interfaces.dto.AuthResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public AuthResponse signIn(AuthRequest authRequest) {
+    public Member signIn(AuthRequest authRequest) {
         // 로직
         Member member = memberRepository.findByEmail(authRequest.getEmail())
             .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
@@ -29,7 +28,12 @@ public class AuthServiceImpl implements AuthService {
             throw new PasswordMismatchException("Password mismatch");
         }
 
-        // 토큰 생성 및 보내기
-        return AuthResponse.builder().token("fuck").build();
+        return member;
+    }
+
+    @Override
+    public Member getByCredentials(String userEmail) {
+        return memberRepository.findByEmail(userEmail)
+            .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
     }
 }

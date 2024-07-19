@@ -20,6 +20,7 @@ public class MemberFindDTO {
 	private String email;
 	private String nickname;
 	private LocalDateTime registeredAt;
+	private String refreshToken;
 
 	public static MemberFindDTO toDTO(Member member) {
 		return MemberFindDTO.builder()
@@ -27,6 +28,7 @@ public class MemberFindDTO {
 			.email(member.getEmail())
 			.nickname(member.getNickname())
 			.registeredAt(member.getRegisteredAt())
+			.refreshToken(member.getRefreshToken())
 			.build();
 	}
 
@@ -36,6 +38,7 @@ public class MemberFindDTO {
 			.email(memberFindDTO.getEmail())
 			.nickname(memberFindDTO.getNickname())
 			.registeredAt(memberFindDTO.getRegisteredAt())
+			.refreshToken(memberFindDTO.getRefreshToken())
 			.build();
 	}
 }

@@ -2,6 +2,7 @@ package com.kmaengggong.kmaengggong.member.domain;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.persistence.Column;
@@ -36,9 +37,14 @@ public class Member {
 
 	private LocalDateTime registeredAt;
 
+	private String refreshToken;
+
+	private Role role;
+
 	@PrePersist
 	protected void onCreate() {
 		this.registeredAt = LocalDateTime.now();
+		this.role = Role.USER;
 	}
 
 	public void update(String nickname) {
@@ -47,6 +53,10 @@ public class Member {
 
 	public void updatePassword(String password) {
 		if(password != null) this.password = password;
+	}
+
+	public void updateRefreshToken(String refreshToken) {
+		if(refreshToken != null) this.refreshToken = refreshToken;
 	}
 
 	public void passwordEncode(BCryptPasswordEncoder bCryptPasswordEncoder){

@@ -9,12 +9,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.kmaengggong.kmaengggong.jwt.application.TokenProvider;
+import com.kmaengggong.kmaengggong.jwt.filter.TokenAuthenticationFilter;
+
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-// @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final TokenProvider tokenProvider;
 
     // 정적 파일, .jsp 미적용
     @Bean
@@ -68,7 +72,8 @@ public class SecurityConfig {
 //									.userService(oauth2UserCustomService));
 //				})
             // Request를 서버가 처리하기 직전 시점에 해당 필터를 사용해 로그인 검증
-            // .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(tokenAuthenticationFilter(),
+                UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 
@@ -79,8 +84,8 @@ public class SecurityConfig {
     }
 
 	// 토큰 인증 필터
-	// @Bean
-	// TokenAuthenticationFilter tokenAuthenticationFilter() {
-	// 	return new TokenAuthenticationFilter(tokenProvider);
-	// }
+	@Bean
+	TokenAuthenticationFilter tokenAuthenticationFilter() {
+		return new TokenAuthenticationFilter(tokenProvider);
+	}
 }

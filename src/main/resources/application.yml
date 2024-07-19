@@ -19,3 +19,7 @@ spring:
 
 mybatis:
     mapper-locations: classpath:mybatis/mapper/**/**.xml
+
+jwt:
+    issuer: kmaengggong
+    secret_key: 123456789123456789123456789123456789asdfasdfasdf
