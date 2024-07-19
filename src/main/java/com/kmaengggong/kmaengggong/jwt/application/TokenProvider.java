@@ -47,7 +47,7 @@ public class TokenProvider {
 				.setIssuedAt(now)
 				.setExpiration(expiry)
 				.setSubject(member.getEmail())
-				.claim("userId",  member.getMemberId())  // 클레임에는 PK 제공
+				.claim("memberId",  member.getMemberId())  // 클레임에는 PK 제공
 				.signWith(SignatureAlgorithm.HS256, secretKey)
 				.compact();
 	}
@@ -98,12 +98,12 @@ public class TokenProvider {
 		}
 	}
 	
-	public Long getUserId(String token) {
+	public Long getMemberId(String token) {
 		Claims claims = getClaims(token);
-		return claims.get("userId", Long.class);
+		return claims.get("memberId", Long.class);
 	}
 	
-	public String getUserEmail(String token) {
+	public String getEmail(String token) {
 		Claims claims = getClaims(token);
 		return claims.get("sub", String.class);
 	}

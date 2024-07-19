@@ -43,13 +43,10 @@ public class BoardController extends CommonController {
 	private final LikeService likeService;
 
 	@PostMapping
-	public ResponseEntity<Void> save(@RequestBody ArticleRequest articleRequest, UriComponentsBuilder ucb) {
+	public ResponseEntity<Void> save(@RequestBody ArticleRequest articleRequest) {
 		ArticleSaveDTO articleSaveDTO = ArticleRequest.toSaveDTO(articleRequest);
 		ArticleFindDTO articleFindDTO = articleService.save(articleSaveDTO);
-		URI uri = ucb
-			.path("board/{articleId}")
-			.buildAndExpand(articleFindDTO.getArticleId())
-			.toUri();
+		URI uri = getUri("board/{articleId}", articleFindDTO.getArticleId());
 		return ResponseEntity.created(uri).build();
 	}
 

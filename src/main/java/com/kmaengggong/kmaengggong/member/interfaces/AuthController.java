@@ -10,7 +10,6 @@ import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 import com.kmaengggong.kmaengggong.jwt.application.TokenService;
 import com.kmaengggong.kmaengggong.jwt.interfaces.dto.AccessTokenResponse;
 import com.kmaengggong.kmaengggong.member.application.AuthService;
-import com.kmaengggong.kmaengggong.member.application.dto.MemberFindDTO;
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.interfaces.dto.AuthRequest;
 

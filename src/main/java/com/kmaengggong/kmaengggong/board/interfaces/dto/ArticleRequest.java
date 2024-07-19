@@ -18,14 +18,14 @@ public class ArticleRequest {
 	private Long authorId;
 	private String title;
 	private String content;
-	private String headerIamge;
+	private String headerImage;
 
 	public static ArticleSaveDTO toSaveDTO(ArticleRequest articleRequest) {
 		return ArticleSaveDTO.builder()
 			.authorId(articleRequest.getAuthorId())
 			.title(articleRequest.getTitle())
 			.content(articleRequest.getContent())
-			.headerImage(articleRequest.getHeaderIamge())
+			.headerImage(articleRequest.getHeaderImage())
 			.build();
 	}
 
@@ -33,7 +33,7 @@ public class ArticleRequest {
 		return ArticleUpdateDTO.builder()
 			.title(articleRequest.getTitle())
 			.content(articleRequest.getContent())
-			.headerImage(articleRequest.getHeaderIamge())
+			.headerImage(articleRequest.getHeaderImage())
 			.build();
 	}
 }

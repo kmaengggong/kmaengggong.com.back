@@ -85,7 +85,7 @@ public class TokenController extends CommonController {
 			if(!tokenProvider.validToken(refreshToken)) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 				"Refresh token is invalid");		
 						
-			Long memberId = tokenProvider.getUserId(refreshToken);
+			Long memberId = tokenProvider.getMemberId(refreshToken);
 			MemberFindDTO memberFindDTO = memberService.findById(memberId);
 			
 			// DB에 저장된 리프레쉬 토큰과 일치하지 않음
