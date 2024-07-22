@@ -23,17 +23,19 @@ public class ArticleFindDTO {
 	private String content;
 	private String headerImage;
 	private Long viewCount;
+	private String categoryName;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
-	public static ArticleFindDTO toDTO(Article article, String nickname) {
+	public static ArticleFindDTO toDTO(Article article, String nickname, String categoryName) {
 		return ArticleFindDTO.builder()
 			.articleId(article.getArticleId())
 			.authorId(article.getAuthorId())
 			.nickname(nickname)
-			.viewCount(article.getViewCount())
 			.title(article.getTitle())
 			.content(article.getContent())
+			.viewCount(article.getViewCount())
+			.categoryName(categoryName)
 			.headerImage(article.getHeaderImage())
 			.createdAt(article.getCreatedAt())
 			.updatedAt(article.getUpdatedAt())
@@ -44,10 +46,10 @@ public class ArticleFindDTO {
 		return Article.builder()
 			.articleId(articleFindDTO.getArticleId())
 			.authorId(articleFindDTO.getAuthorId())
-			.viewCount(articleFindDTO.getViewCount())
 			.title(articleFindDTO.getTitle())
 			.content(articleFindDTO.getContent())
 			.headerImage(articleFindDTO.getHeaderImage())
+			.viewCount(articleFindDTO.getViewCount())
 			.createdAt(articleFindDTO.getCreatedAt())
 			.updatedAt(articleFindDTO.getUpdatedAt())
 			.build();

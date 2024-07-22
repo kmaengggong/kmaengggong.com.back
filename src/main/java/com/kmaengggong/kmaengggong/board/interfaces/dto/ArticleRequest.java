@@ -19,6 +19,7 @@ public class ArticleRequest {
 	private String title;
 	private String content;
 	private String headerImage;
+	private Long categoryId;
 
 	public static ArticleSaveDTO toSaveDTO(ArticleRequest articleRequest) {
 		return ArticleSaveDTO.builder()
@@ -26,6 +27,7 @@ public class ArticleRequest {
 			.title(articleRequest.getTitle())
 			.content(articleRequest.getContent())
 			.headerImage(articleRequest.getHeaderImage())
+			.categoryId(articleRequest.getCategoryId())
 			.build();
 	}
 
@@ -34,6 +36,7 @@ public class ArticleRequest {
 			.title(articleRequest.getTitle())
 			.content(articleRequest.getContent())
 			.headerImage(articleRequest.getHeaderImage())
+			.categoryId(articleRequest.getCategoryId())
 			.build();
 	}
 }

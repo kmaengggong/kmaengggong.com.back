@@ -18,6 +18,7 @@ public class ArticleUpdateDTO {
 	private String title;
 	private String content;
 	private String headerImage;
+	private Long categoryId;
 
 	public static Article toEntity(ArticleUpdateDTO articleUpdateDTO) {
 		return Article.builder()

@@ -23,6 +23,7 @@ public class ArticleResponse {
 	private String content;
 	private String headerImage;
 	private Long viewCount;
+	private String categoryName;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
@@ -35,6 +36,7 @@ public class ArticleResponse {
 			.content(articleFindDTO.getContent())
 			.headerImage(articleFindDTO.getHeaderImage())
 			.viewCount(articleFindDTO.getViewCount())
+			.categoryName(articleFindDTO.getCategoryName())
 			.createdAt(articleFindDTO.getCreatedAt())
 			.updatedAt(articleFindDTO.getUpdatedAt())
 			.build();
