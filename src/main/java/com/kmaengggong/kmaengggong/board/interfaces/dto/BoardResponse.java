@@ -14,6 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardResponse {
-    private ArticleResponse articleRequest;
-    private List<CommentResponse> commentRequests;
+    private ArticleResponse articleResponse;
+    private List<CommentResponse> commentResponse;
 }

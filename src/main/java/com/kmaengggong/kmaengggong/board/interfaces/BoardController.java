@@ -31,7 +31,9 @@ import com.kmaengggong.kmaengggong.board.interfaces.dto.BoardResponse;
 import com.kmaengggong.kmaengggong.board.interfaces.dto.CommentResponse;
 import com.kmaengggong.kmaengggong.common.interfaces.CommonController;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -70,14 +72,37 @@ public class BoardController extends CommonController {
 	}
 
 	@GetMapping("/{articleId}")
-	public ResponseEntity<BoardResponse> findById(@PathVariable("articleId") Long articleId) {
+	public ResponseEntity<BoardResponse> findById(@PathVariable("articleId") Long articleId, HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		String cookieName = "article_" + articleId + "_viewed";
+		boolean isUniqueView = true;
+
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null){
+			for(Cookie cookie : cookies){
+				if(cookie.getName().equals(cookieName)){
+					isUniqueView = false;
+					break;
+				}
+			}
+		}
+
+		if(isUniqueView){
+			Cookie viewCookie = new Cookie(cookieName, "true");
+			viewCookie.setMaxAge(300);
+			viewCookie.setPath("/");
+			response.addCookie(viewCookie);
+			articleService.incrementViewCount(articleId);
+		}
+
 		ArticleResponse articleResponse = ArticleResponse.toResponse(articleService.findById(articleId));
 		List<CommentResponse> commentResponses = commentService.findAllByArticleId(articleId).stream()
 			.map(CommentResponse::toResponse)
 			.collect(Collectors.toList());
 		BoardResponse boardResponse = BoardResponse.builder()
-			.articleRequest(articleResponse)
-			.commentRequests(commentResponses)
+			.articleResponse(articleResponse)
+			.commentResponse(commentResponses)
 			.build();
 
 		return ResponseEntity.ok(boardResponse);

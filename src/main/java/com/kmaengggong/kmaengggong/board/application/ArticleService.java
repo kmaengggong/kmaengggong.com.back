@@ -19,4 +19,6 @@ public interface ArticleService {
 	void update(ArticleUpdateDTO articleUpdateDTO);
 
 	void deleteById(Long articleId);
+
+	void incrementViewCount(Long articleId);
 }

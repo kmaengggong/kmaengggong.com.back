@@ -16,6 +16,8 @@ import com.kmaengggong.kmaengggong.board.application.dto.ArticleUpdateDTO;
 import com.kmaengggong.kmaengggong.board.domain.Article;
 import com.kmaengggong.kmaengggong.board.domain.ArticleRepository;
 import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.member.domain.Member;
+import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +26,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 	private final ArticleRepository articleRepository;
+	private final MemberRepository memberRepository;
 
 	@Override
 	@Transactional
 	public ArticleFindDTO save(ArticleSaveDTO articleSaveDTO) {
 		Article article = ArticleSaveDTO.toEntity(articleSaveDTO);
 		article = articleRepository.save(article);
-		return ArticleFindDTO.toDTO(article);
+		return getNickname(article);
 	}
 
 	@Override
 	public List<ArticleFindDTO> findAll() {
 		List<Article> articles = articleRepository.findAll();
 		return articles.stream()
-			.map(ArticleFindDTO::toDTO)
+			.map((article) -> {
+				return getNickname(article);
+			})
 			.collect(Collectors.toList());
 	}
 
@@ -62,17 +67,18 @@ public class ArticleServiceImpl implements ArticleService {
 			));
 		}
 
-		List<ArticleFindDTO> articleFindDTOs = articlePage.getContent().stream()
-			.map(ArticleFindDTO::toDTO)
-			.collect(Collectors.toList());
-		return new PageImpl<>(articleFindDTOs, pageable, articlePage.getTotalElements());
+		Page<ArticleFindDTO> articleFindDTOs = articlePage
+			.map((article) -> {
+				return getNickname(article);
+			});
+		return articleFindDTOs;
 	}
 
 	@Override
 	public ArticleFindDTO findById(Long articleId) {
 		Article article = articleRepository.findById(articleId)
 			.orElseThrow(() -> new ResourceNotFoundException("Article not found"));
-		return ArticleFindDTO.toDTO(article);
+		return getNickname(article);
 	}
 
 	@Override
@@ -94,5 +100,20 @@ public class ArticleServiceImpl implements ArticleService {
 		Article article = articleRepository.findById(articleId)
 			.orElseThrow(() -> new ResourceNotFoundException("Article not found"));
 		articleRepository.deleteById(article.getArticleId());
+	}
+
+	@Override
+	@Transactional
+	public void incrementViewCount(Long articleId) {
+		Article article = articleRepository.findById(articleId)
+			.orElseThrow(() -> new ResourceNotFoundException("Article not found"));
+		article.updateViewCount(article.getViewCount() + 1);
+		articleRepository.save(article);
+	}
+
+	public ArticleFindDTO getNickname(Article article) {
+		Member member = memberRepository.findById(article.getAuthorId()).orElse(null);
+		String nickname = (member != null) ? member.getNickname() : "Unknown";
+		return ArticleFindDTO.toDTO(article, nickname);
 	}
 }

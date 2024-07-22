@@ -32,9 +32,12 @@ public class Article implements Likeable {
 	@Column(nullable = false)
 	private String title;
 
+	@Column(length = 2048)
 	private String content;
 
 	private String headerImage;
+
+	private Long viewCount;
 
 	private LocalDateTime createdAt;
 
@@ -42,6 +45,7 @@ public class Article implements Likeable {
 
 	@PrePersist
 	protected void onCreate() {
+		viewCount = 0L;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}
@@ -56,6 +60,10 @@ public class Article implements Likeable {
 		if(content != null) this.content = content;
 		if(headerImage != null) this.headerImage = headerImage;
 		this.updatedAt = LocalDateTime.now();
+	}
+
+	public void updateViewCount(Long viewCount){
+		this.viewCount = viewCount;
 	}
 
 	@Override

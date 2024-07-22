@@ -18,16 +18,20 @@ import lombok.Setter;
 public class ArticleFindDTO {
 	private Long articleId;
 	private Long authorId;
+	private String nickname;
 	private String title;
 	private String content;
 	private String headerImage;
+	private Long viewCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
-	public static ArticleFindDTO toDTO(Article article) {
+	public static ArticleFindDTO toDTO(Article article, String nickname) {
 		return ArticleFindDTO.builder()
 			.articleId(article.getArticleId())
 			.authorId(article.getAuthorId())
+			.nickname(nickname)
+			.viewCount(article.getViewCount())
 			.title(article.getTitle())
 			.content(article.getContent())
 			.headerImage(article.getHeaderImage())
@@ -40,6 +44,7 @@ public class ArticleFindDTO {
 		return Article.builder()
 			.articleId(articleFindDTO.getArticleId())
 			.authorId(articleFindDTO.getAuthorId())
+			.viewCount(articleFindDTO.getViewCount())
 			.title(articleFindDTO.getTitle())
 			.content(articleFindDTO.getContent())
 			.headerImage(articleFindDTO.getHeaderImage())

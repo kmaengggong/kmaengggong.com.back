@@ -18,9 +18,11 @@ import lombok.Setter;
 public class ArticleResponse {
 	private Long articleId;
 	private Long authorId;
+	private String nickname;
 	private String title;
 	private String content;
 	private String headerImage;
+	private Long viewCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
@@ -28,9 +30,11 @@ public class ArticleResponse {
 		return ArticleResponse.builder()
 			.articleId(articleFindDTO.getArticleId())
 			.authorId(articleFindDTO.getAuthorId())
+			.nickname(articleFindDTO.getNickname())
 			.title(articleFindDTO.getTitle())
 			.content(articleFindDTO.getContent())
 			.headerImage(articleFindDTO.getHeaderImage())
+			.viewCount(articleFindDTO.getViewCount())
 			.createdAt(articleFindDTO.getCreatedAt())
 			.updatedAt(articleFindDTO.getUpdatedAt())
 			.build();
