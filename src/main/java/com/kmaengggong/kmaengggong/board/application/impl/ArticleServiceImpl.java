@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
+	private static final int PAGE_SIZE = 10;
 	private static final int DELETE_LIMIT = 7;
 
 	private final ArticleRepository articleRepository;
@@ -56,29 +58,35 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Page<ArticleFindDTO> findAll(Pageable pageable) {
-		// 0 이하의 페이지 -> 0으로
-		int pageNumber = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber();
-		// 조회
+		// // 0 이하의 페이지 -> 0으로
+		// int pageNumber = pageable.getPageNumber() <= 1 ? 1 : pageable.getPageNumber();
+		// // 조회
+		// Page<Article> articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
+		// 	pageNumber - 1,
+		// 	PAGE_SIZE,
+		// 	Sort.by(Sort.Direction.DESC, "createdAt")
+		// ));
+		// // 0페이지보다 큰데 비어있다면, 그 전의 마지막 페이지로 다시 조회
+		// if(articlePage.isEmpty() && pageNumber > 0){
+		// 	int lastPage = articlePage.getTotalPages() - 1;
+		// 	pageNumber = lastPage > 1 ? lastPage : 1;
+		// 	articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
+		// 		pageNumber - 1,
+		// 		PAGE_SIZE,
+		// 		Sort.by(Sort.Direction.DESC, "createdAt")
+		// 	));
+		// }
+		int pageNumber = getCalibratedPageNum(Integer.toUnsignedLong(pageable.getPageNumber()));
 		Page<Article> articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
-			pageNumber,
-			pageable.getPageSize(),
-			pageable.getSort()
+			pageNumber - 1,
+			PAGE_SIZE,
+			Sort.by(Sort.Direction.DESC, "createdAt")
 		));
-		// 0페이지보다 큰데 비어있다면, 그 전의 마지막 페이지로 다시 조회
-		if(articlePage.isEmpty() && pageNumber > 0){
-			int lastPage = articlePage.getTotalPages() - 1;
-			pageNumber = lastPage > 0 ? lastPage : 0;
-			articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
-				pageNumber,
-				pageable.getPageSize(),
-				pageable.getSort()
-			));
-		}
 
 		Page<ArticleFindDTO> articleFindDTOs = articlePage
 			.map((article) -> {
 				return getNicknameAndCategoryName(article);
-			});
+		});
 		return articleFindDTOs;
 	}
 
@@ -147,5 +155,17 @@ public class ArticleServiceImpl implements ArticleService {
 		String nickname = (member != null) ? member.getNickname() : "Unknown";
 		String categoryName = article.getCategory().getCategoryName();
 		return ArticleFindDTO.toDTO(article, nickname, categoryName);
+	}
+
+	// 보정된 pageNum으로 가공해주는 메서드
+	public int getCalibratedPageNum(Long pageNum) {
+		if(pageNum == null || pageNum <= 0L) {
+			pageNum = 1L;
+		}
+		else {
+			int totalPagesCount = (int) Math.ceil(articleRepository.count() / (PAGE_SIZE + 0.0));
+			pageNum = pageNum > totalPagesCount ? totalPagesCount : pageNum;
+		}
+		return pageNum.intValue();
 	}
 }
