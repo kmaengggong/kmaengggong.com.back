@@ -122,6 +122,12 @@ public class BoardController extends CommonController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PatchMapping("/{articleId}/restore")
+	public ResponseEntity<Void> restoreById(@PathVariable("articleId") Long articleId) {
+		articleService.restoreById(articleId);
+		return ResponseEntity.noContent().build();
+	}
+
 	@PostMapping("/{articleId}/like")
 	public ResponseEntity<Void> likeArticle(@PathVariable("articleId") Long articleId,
 		@RequestHeader(value = "Member-Id", required = false) Long memberId,

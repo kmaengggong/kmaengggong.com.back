@@ -1,5 +1,6 @@
 package com.kmaengggong.kmaengggong.board.application.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.kmaengggong.kmaengggong.board.application.ArticleService;
@@ -27,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
+	private static final int DELETE_LIMIT = 7;
+
 	private final ArticleRepository articleRepository;
 	private final MemberRepository memberRepository;
 	private final CategoryRepository categoryRepository;
@@ -55,7 +59,7 @@ public class ArticleServiceImpl implements ArticleService {
 		// 0 이하의 페이지 -> 0으로
 		int pageNumber = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber();
 		// 조회
-		Page<Article> articlePage = articleRepository.findAll(PageRequest.of(
+		Page<Article> articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
 			pageNumber,
 			pageable.getPageSize(),
 			pageable.getSort()
@@ -64,7 +68,7 @@ public class ArticleServiceImpl implements ArticleService {
 		if(articlePage.isEmpty() && pageNumber > 0){
 			int lastPage = articlePage.getTotalPages() - 1;
 			pageNumber = lastPage > 0 ? lastPage : 0;
-			articlePage = articleRepository.findAll(PageRequest.of(
+			articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
 				pageNumber,
 				pageable.getPageSize(),
 				pageable.getSort()
@@ -105,7 +109,28 @@ public class ArticleServiceImpl implements ArticleService {
 	public void deleteById(Long articleId) {
 		Article article = articleRepository.findById(articleId)
 			.orElseThrow(() -> new ResourceNotFoundException("Article not found"));
-		articleRepository.deleteById(article.getArticleId());
+		// articleRepository.deleteById(article.getArticleId());
+		article.updateDeleted(true);
+		articleRepository.save(article);
+	}
+
+	@Override
+	@Transactional
+	public void restoreById(Long articleId) {
+		Article article = articleRepository.findById(articleId)
+		.orElseThrow(() -> new ResourceNotFoundException("Article not found"));
+		article.updateDeleted(false);
+		articleRepository.save(article);
+	}
+
+	@Override
+	@Transactional
+	@Scheduled(cron = "0 0 0 * * ?")
+	public void deleteByTime() {
+		LocalDateTime now = LocalDateTime.now();
+		articleRepository.findAllByIsDeletedIsTrue().stream()
+			.filter((article) -> article.getDeletedAt().plusDays(DELETE_LIMIT).isBefore(now))
+			.forEach((article) -> articleRepository.deleteById(article.getArticleId()));
 	}
 
 	@Override

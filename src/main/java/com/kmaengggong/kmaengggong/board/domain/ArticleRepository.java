@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 	List<Article> findAll();
-	Page<Article> findAll(Pageable pageable);
+	Page<Article> findAllByIsDeletedIsFalse(Pageable pageable);
+	List<Article> findAllByIsDeletedIsTrue();
 	
 	boolean existsByArticleId(Long articleId);
 }

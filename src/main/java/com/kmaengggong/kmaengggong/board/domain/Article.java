@@ -50,11 +50,16 @@ public class Article implements Likeable {
 
 	private LocalDateTime updatedAt;
 
+	private boolean isDeleted;
+
+	private LocalDateTime deletedAt;
+
 	@PrePersist
 	protected void onCreate() {
 		viewCount = 0L;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
+		this.isDeleted = false;
 	}
 
 	@PreUpdate
@@ -70,8 +75,14 @@ public class Article implements Likeable {
 		this.updatedAt = LocalDateTime.now();
 	}
 
-	public void updateViewCount(Long viewCount){
+	public void updateViewCount(Long viewCount) {
 		this.viewCount = viewCount;
+	}
+
+	public void updateDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+		if(isDeleted) this.deletedAt = LocalDateTime.now();
+		else this.deletedAt = null;
 	}
 
 	@Override
