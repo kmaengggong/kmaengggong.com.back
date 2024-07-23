@@ -66,11 +66,16 @@ public class BoardController extends CommonController {
 			.collect(Collectors.toList());
 		List<BoardResponse> boardResponses = articleResponses.stream()
 			.map(articleResponse -> {
-				List<CommentResponse> commentResponses = commentService.findAllByArticleId(
-					articleResponse.getArticleId()).stream()
-						.map(CommentResponse::toResponse)
-						.collect(Collectors.toList());
-				return new BoardResponse(articleResponse, commentResponses);
+				int commentLength = commentService.countTotalComments(articleResponse.getArticleId());
+				articleResponse.setCommentLength(Integer.toUnsignedLong(commentLength));
+				return BoardResponse.builder()
+					.articleResponse(articleResponse)
+					.build();
+				// List<CommentResponse> commentResponses = commentService.findAllByArticleId(
+				// 	articleResponse.getArticleId()).stream()
+				// 		.map(CommentResponse::toResponse)
+				// 		.collect(Collectors.toList());
+				// return new BoardResponse(articleResponse, commentResponses);
 			})
 			.collect(Collectors.toList());
 		Page<BoardResponse> boardResponsePage = new PageImpl<BoardResponse>(
@@ -94,11 +99,16 @@ public class BoardController extends CommonController {
 			.collect(Collectors.toList());
 		List<BoardResponse> boardResponses = articleResponses.stream()
 			.map(articleResponse -> {
-				List<CommentResponse> commentResponses = commentService.findAllByArticleId(
-					articleResponse.getArticleId()).stream()
-						.map(CommentResponse::toResponse)
-						.collect(Collectors.toList());
-				return new BoardResponse(articleResponse, commentResponses);
+				int commentLength = commentService.countTotalComments(articleResponse.getArticleId());
+				articleResponse.setCommentLength(Integer.toUnsignedLong(commentLength));
+				return BoardResponse.builder()
+					.articleResponse(articleResponse)
+					.build();
+				// List<CommentResponse> commentResponses = commentService.findAllByArticleId(
+				// 	articleResponse.getArticleId()).stream()
+				// 		.map(CommentResponse::toResponse)
+				// 		.collect(Collectors.toList());
+				// return new BoardResponse(articleResponse, commentResponses);
 			})
 			.collect(Collectors.toList());
 		Page<BoardResponse> boardResponsePage = new PageImpl<BoardResponse>(

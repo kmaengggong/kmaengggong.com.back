@@ -1,6 +1,8 @@
 package com.kmaengggong.kmaengggong.board.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.kmaengggong.kmaengggong.board.domain.Comment;
 
@@ -21,6 +23,7 @@ public class CommentFindDTO {
 	private Long articleId;
 	private String content;
 	private LocalDateTime createdAt;
+	private List<CommentFindDTO> replies;
 
 	public static CommentFindDTO toDTO(Comment comment) {
 		return CommentFindDTO.builder()
@@ -29,6 +32,10 @@ public class CommentFindDTO {
 			.articleId(comment.getArticleId())
 			.content(comment.getContent())
 			.createdAt(comment.getCreatedAt())
+			.replies(comment.getReplies().stream()
+				.map(CommentFindDTO::toDTO)
+				.collect(Collectors.toList())
+			)
 			.build();
 	}
 
@@ -39,6 +46,10 @@ public class CommentFindDTO {
 			.articleId(commentFindDTO.getArticleId())
 			.content(commentFindDTO.getContent())
 			.createdAt(commentFindDTO.getCreatedAt())
+			.replies(commentFindDTO.getReplies().stream()
+				.map(CommentFindDTO::toEntity)
+				.collect(Collectors.toList())
+			)
 			.build();
 	}
 }

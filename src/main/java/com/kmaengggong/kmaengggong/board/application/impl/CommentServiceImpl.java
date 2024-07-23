@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public List<CommentFindDTO> findAllByArticleId(Long articleId) {
 		List<Comment> comments = commentMapper.findAllByArticleId(articleId);
-		return comments.stream()
+		return buildCommentHierarchy(comments).stream()
 			.map(CommentFindDTO::toDTO)
 			.collect(Collectors.toList());
 	}
@@ -75,4 +75,39 @@ public class CommentServiceImpl implements CommentService {
 		if(comment == null) throw new ResourceNotFoundException("Comment not found");
 		commentMapper.deleteById(commentId);
 	}
+
+	@Override
+    public int countTotalComments(Long articleId) {
+        List<Comment> comments = commentMapper.findAllByArticleId(articleId);
+        return countTotalComments(comments);
+    }
+
+	private List<Comment> buildCommentHierarchy(List<Comment> comments) {
+		return comments.stream()
+			.filter((comment) -> comment.getParentId() == null)
+			.map((comment) -> {
+				comment.updateReplies(findReplies(comment, comments));
+				return comment;
+			})
+			.collect(Collectors.toList());
+	}
+
+	private List<Comment> findReplies(Comment parentComment, List<Comment> comments) {
+		return comments.stream()
+			.filter((comment) -> parentComment.getCommentId().equals(comment.getParentId()))
+			.map((comment) -> {
+				comment.updateReplies(findReplies(comment, comments));
+				return comment;
+			})
+			.collect(Collectors.toList());
+	}
+
+    private int countTotalComments(List<Comment> comments) {
+		if(comments == null) return 0;
+        int count = comments.size();
+        for (Comment comment : comments) {
+            count += countTotalComments(comment.getReplies());
+        }
+        return count;
+    }
 }

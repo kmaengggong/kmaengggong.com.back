@@ -1,4 +1,6 @@
 # main
+- 대댓글 색상이랑 mb 생각
+- 좋아요를 따로 페칭하는게 아니라, response에 포함해서 보내도록. 카테고리처럼. 그리고 article findAll할 때, 댓글 다 가져오는게 아니라, 댓글 갯수만 가져오는게 나을듯.
 - 권한 설정. PrivateRoute, AdminRoute 등등. 백에서도 전부 여는게 아니라, spring security 적용해서 bearer 없으면 허용 안하는 페이지.
 - 본인이 아닌 경우 update, delete 메서드 보내면 안됨. update 페이지도 접근이 가능.
 - 검색기능. 카테고리 표시.
@@ -17,3 +19,11 @@
 
 # sub
 1. application.yml 암호화
+
+# !
+/board
+    [article, 조회수, 좋아요, 카테고리]
+/board/:articleId
+    article, 조회수, 좋아요, 카테고리, [comment, 좋아요]
+/member
+/member/:memberId

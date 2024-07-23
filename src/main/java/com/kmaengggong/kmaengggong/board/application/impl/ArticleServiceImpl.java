@@ -20,6 +20,7 @@ import com.kmaengggong.kmaengggong.board.domain.Article;
 import com.kmaengggong.kmaengggong.board.domain.ArticleRepository;
 import com.kmaengggong.kmaengggong.board.domain.Category;
 import com.kmaengggong.kmaengggong.board.domain.CategoryRepository;
+import com.kmaengggong.kmaengggong.board.domain.CommentMapper;
 import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
@@ -36,6 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private final ArticleRepository articleRepository;
 	private final MemberRepository memberRepository;
 	private final CategoryRepository categoryRepository;
+	private final CommentMapper commentMapper;
 
 	@Override
 	@Transactional
@@ -148,7 +150,7 @@ public class ArticleServiceImpl implements ArticleService {
 		articleRepository.save(article);
 	}
 
-	public ArticleFindDTO getNicknameAndCategoryName(Article article) {
+	private ArticleFindDTO getNicknameAndCategoryName(Article article) {
 		Member member = memberRepository.findById(article.getAuthorId()).orElse(null);
 		String nickname = (member != null) ? member.getNickname() : "Unknown";
 		String categoryName = article.getCategory().getCategoryName();
@@ -156,7 +158,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	// 보정된 pageNum으로 가공해주는 메서드
-	public int getCalibratedPageNum(Long pageNum) {
+	private int getCalibratedPageNum(Long pageNum) {
 		if(pageNum == null || pageNum <= 0L) {
 			pageNum = 1L;
 		}

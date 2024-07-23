@@ -16,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentSaveDTO {
+	private Long parentId;
 	private Long authorId;
 	private Long articleId;
 	private String content;
@@ -23,6 +24,7 @@ public class CommentSaveDTO {
 
 	public static Comment toEntity(CommentSaveDTO commentSaveDTO) {
 		return Comment.builder()
+			.parentId(commentSaveDTO.getParentId())
 			.authorId(commentSaveDTO.getAuthorId())
 			.articleId(commentSaveDTO.getArticleId())
 			.content(commentSaveDTO.getContent())

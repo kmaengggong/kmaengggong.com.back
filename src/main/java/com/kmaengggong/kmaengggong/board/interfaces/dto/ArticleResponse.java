@@ -27,6 +27,8 @@ public class ArticleResponse {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
+	private Long commentLength;
+
 	public static ArticleResponse toResponse(ArticleFindDTO articleFindDTO) {
 		return ArticleResponse.builder()
 			.articleId(articleFindDTO.getArticleId())

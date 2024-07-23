@@ -14,4 +14,5 @@ public interface CommentService {
 	CommentFindDTO findLatest();
 	void update(CommentUpdateDTO commentUpdateDTO);
 	void deleteById(Long commentId);
+	int countTotalComments(Long articleId);
 }

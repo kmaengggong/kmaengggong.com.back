@@ -6,12 +6,14 @@
 	<insert id="save" parameterType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		INSERT INTO COMMENT(
 			COMMENT_ID,
+			PARENT_ID,
 			AUTHOR_ID,
 			ARTICLE_ID,
 			CONTENT
 		)
 		VALUES (
 			#{comment.commentId},
+			#{comment.parentId},
 			#{comment.authorId},
 			#{comment.articleId},
 			#{comment.content}
@@ -21,6 +23,7 @@
 	<select id="findAll" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		SELECT
 			COMMENT_ID AS commentId,
+			PARENT_ID AS parentId,
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
@@ -34,6 +37,7 @@
 	<select id="findAllByArticleId" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		SELECT
 			COMMENT_ID AS commentId,
+			PARENT_ID AS parentId,
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
@@ -49,6 +53,7 @@
 	<select id="findById" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		SELECT
 			COMMENT_ID AS commentId,
+			PARENT_ID AS parentId,
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
