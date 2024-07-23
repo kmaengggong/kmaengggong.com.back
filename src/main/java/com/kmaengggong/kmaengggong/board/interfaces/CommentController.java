@@ -38,13 +38,10 @@ public class CommentController extends CommonController {
     private final LikeService likeService;
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody CommentRequest commentRequest, UriComponentsBuilder ucb) {
+    public ResponseEntity<Void> save(@RequestBody CommentRequest commentRequest) {
         CommentSaveDTO commentSaveDTO = CommentRequest.toSaveDTO(commentRequest);
         commentService.save(commentSaveDTO);
-        URI uri = ucb
-            .path("board/{articleId}")
-            .buildAndExpand(commentRequest.getArticleId())
-            .toUri();
+        URI uri = getUri("board/{articleId}", commentRequest.getArticleId());
         return ResponseEntity.created(uri).build();
     }
 

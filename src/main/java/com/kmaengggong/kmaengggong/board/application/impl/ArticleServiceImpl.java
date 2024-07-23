@@ -58,35 +58,33 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Page<ArticleFindDTO> findAll(Pageable pageable) {
-		// // 0 이하의 페이지 -> 0으로
-		// int pageNumber = pageable.getPageNumber() <= 1 ? 1 : pageable.getPageNumber();
-		// // 조회
-		// Page<Article> articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
-		// 	pageNumber - 1,
-		// 	PAGE_SIZE,
-		// 	Sort.by(Sort.Direction.DESC, "createdAt")
-		// ));
-		// // 0페이지보다 큰데 비어있다면, 그 전의 마지막 페이지로 다시 조회
-		// if(articlePage.isEmpty() && pageNumber > 0){
-		// 	int lastPage = articlePage.getTotalPages() - 1;
-		// 	pageNumber = lastPage > 1 ? lastPage : 1;
-		// 	articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
-		// 		pageNumber - 1,
-		// 		PAGE_SIZE,
-		// 		Sort.by(Sort.Direction.DESC, "createdAt")
-		// 	));
-		// }
 		int pageNumber = getCalibratedPageNum(Integer.toUnsignedLong(pageable.getPageNumber()));
 		Page<Article> articlePage = articleRepository.findAllByIsDeletedIsFalse(PageRequest.of(
 			pageNumber - 1,
 			PAGE_SIZE,
 			Sort.by(Sort.Direction.DESC, "createdAt")
 		));
-
 		Page<ArticleFindDTO> articleFindDTOs = articlePage
 			.map((article) -> {
 				return getNicknameAndCategoryName(article);
 		});
+
+		return articleFindDTOs;
+	}
+
+	@Override
+	public Page<ArticleFindDTO> findAllByAuthorId(Long authorId, Pageable pageable) {
+		int pageNumber = getCalibratedPageNum(Integer.toUnsignedLong(pageable.getPageNumber()));
+		Page<Article> articlePage = articleRepository.findAllByAuthorId(authorId, PageRequest.of(
+			pageNumber - 1,
+			PAGE_SIZE,
+			pageable.getSort()
+		));
+		Page<ArticleFindDTO> articleFindDTOs = articlePage
+			.map((article) -> {
+				return getNicknameAndCategoryName(article);
+		});
+
 		return articleFindDTOs;
 	}
 

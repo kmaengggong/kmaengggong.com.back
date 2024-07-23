@@ -84,6 +84,34 @@ public class BoardController extends CommonController {
         return ResponseEntity.ok(pagedModel);
 	}
 
+	@GetMapping("/{memberId}/member")
+	public ResponseEntity<PagedModel<EntityModel<BoardResponse>>> findAllByAuthorId(@PathVariable("memberId") Long memberId, 
+		Pageable pageable) {
+
+		Page<ArticleFindDTO> articlePage = articleService.findAllByAuthorId(memberId, pageable);
+		List<ArticleResponse> articleResponses = articlePage.getContent().stream()
+			.map(ArticleResponse::toResponse)
+			.collect(Collectors.toList());
+		List<BoardResponse> boardResponses = articleResponses.stream()
+			.map(articleResponse -> {
+				List<CommentResponse> commentResponses = commentService.findAllByArticleId(
+					articleResponse.getArticleId()).stream()
+						.map(CommentResponse::toResponse)
+						.collect(Collectors.toList());
+				return new BoardResponse(articleResponse, commentResponses);
+			})
+			.collect(Collectors.toList());
+		Page<BoardResponse> boardResponsePage = new PageImpl<BoardResponse>(
+			boardResponses,
+			articlePage.getPageable(),
+			articlePage.getTotalElements()
+		);
+
+		PagedModel<EntityModel<BoardResponse>> pagedModel = pagedResourcesAssembler.toModel(boardResponsePage);
+
+        return ResponseEntity.ok(pagedModel);
+	}
+
 	@GetMapping("/{articleId}")
 	public ResponseEntity<BoardResponse> findById(@PathVariable("articleId") Long articleId, HttpServletRequest request,
 		HttpServletResponse response) {

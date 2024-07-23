@@ -14,6 +14,7 @@ public interface ArticleService {
 
 	List<ArticleFindDTO> findAll();
 	Page<ArticleFindDTO> findAll(Pageable pageable);
+	Page<ArticleFindDTO> findAllByAuthorId(Long authorId, Pageable pageable);
 	ArticleFindDTO findById(Long articleId);
 
 	void update(ArticleUpdateDTO articleUpdateDTO);

@@ -63,6 +63,7 @@ public class CommentServiceImpl implements CommentService {
 	public void update(CommentUpdateDTO commentUpdateDTO) {
 		Comment comment = commentMapper.findById(commentUpdateDTO.getCommentId());
 		if(comment == null) throw new ResourceNotFoundException("Comment not found");
+		if(commentUpdateDTO.getContent() == null) return;
 		Comment updateComment = CommentUpdateDTO.toEntity(commentUpdateDTO);
 		commentMapper.update(updateComment);
 	}

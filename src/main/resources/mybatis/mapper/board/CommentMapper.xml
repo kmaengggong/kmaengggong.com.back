@@ -28,7 +28,7 @@
 		FROM
 			COMMENT
 		ORDER BY
-			CREATED_AT DESC
+			CREATED_AT ASC
 	</select>
 	
 	<select id="findAllByArticleId" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
@@ -43,7 +43,7 @@
 		WHERE
 			ARTICLE_ID = #{articleId}
 		ORDER BY
-			CREATED_AT DESC
+			CREATED_AT ASC
 	</select>
 	
 	<select id="findById" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
@@ -76,11 +76,8 @@
 	<update id="update" parameterType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		UPDATE
 			COMMENT
-		<trim prefix="SET" suffixOverrides=",">
-			<if test="comment.content != null">
-				CONTENT = #{comment.content},
-			</if>
-		</trim>
+		SET
+			CONTENT = #{comment.content}
 		WHERE
 			COMMENT_ID = #{comment.commentId}
 	</update>
