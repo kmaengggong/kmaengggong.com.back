@@ -66,7 +66,7 @@ public class BoardController extends CommonController {
 			.collect(Collectors.toList());
 		List<BoardResponse> boardResponses = articleResponses.stream()
 			.map(articleResponse -> {
-				int commentLength = commentService.countTotalComments(articleResponse.getArticleId());
+				int commentLength = commentService.countCommentHierarchy(articleResponse.getArticleId());
 				articleResponse.setCommentLength(Integer.toUnsignedLong(commentLength));
 				return BoardResponse.builder()
 					.articleResponse(articleResponse)
@@ -99,7 +99,7 @@ public class BoardController extends CommonController {
 			.collect(Collectors.toList());
 		List<BoardResponse> boardResponses = articleResponses.stream()
 			.map(articleResponse -> {
-				int commentLength = commentService.countTotalComments(articleResponse.getArticleId());
+				int commentLength = commentService.countCommentHierarchy(articleResponse.getArticleId());
 				articleResponse.setCommentLength(Integer.toUnsignedLong(commentLength));
 				return BoardResponse.builder()
 					.articleResponse(articleResponse)

@@ -12,6 +12,8 @@ import com.kmaengggong.kmaengggong.board.application.dto.CommentUpdateDTO;
 import com.kmaengggong.kmaengggong.board.domain.Comment;
 import com.kmaengggong.kmaengggong.board.domain.CommentMapper;
 import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
+import com.kmaengggong.kmaengggong.member.domain.Member;
+import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 	private final CommentMapper commentMapper;
+	private final MemberRepository memberRepository;
 
 	@Override
 	@Transactional
@@ -31,16 +34,22 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public List<CommentFindDTO> findAll() {
 		List<Comment> comments = commentMapper.findAll();
-		return comments.stream()
-			.map(CommentFindDTO::toDTO)
+		List<CommentFindDTO> commentFindDTOs = comments.stream()
+			.map((comment) -> CommentFindDTO.toDTO(comment, null))
+			.collect(Collectors.toList());
+			return buildCommentHierarchy(commentFindDTOs).stream()
+			.map((comment) -> getNickname(comment))
 			.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<CommentFindDTO> findAllByArticleId(Long articleId) {
 		List<Comment> comments = commentMapper.findAllByArticleId(articleId);
-		return buildCommentHierarchy(comments).stream()
-			.map(CommentFindDTO::toDTO)
+		List<CommentFindDTO> commentFindDTOs = comments.stream()
+			.map((comment) -> CommentFindDTO.toDTO(comment, null))
+			.collect(Collectors.toList());
+		return buildCommentHierarchy(commentFindDTOs).stream()
+			.map((comment) -> getNickname(comment))
 			.collect(Collectors.toList());
 	}
 
@@ -48,14 +57,14 @@ public class CommentServiceImpl implements CommentService {
 	public CommentFindDTO findById(Long commentId) {
 		Comment comment = commentMapper.findById(commentId);
 		if(comment == null) throw new ResourceNotFoundException("Comment not found");
-		return CommentFindDTO.toDTO(comment);
+		return getNickname(CommentFindDTO.toDTO(comment, null));
 	}
 
 	@Override
 	public CommentFindDTO findLatest() {
 		Comment comment = commentMapper.findLatest();
 		if(comment == null) throw new ResourceNotFoundException("Comment not found");
-		return CommentFindDTO.toDTO(comment);
+		return getNickname(CommentFindDTO.toDTO(comment, null));
 	}
 
 	@Override
@@ -77,27 +86,28 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-    public int countTotalComments(Long articleId) {
+    public int countCommentHierarchy(Long articleId) {
         List<Comment> comments = commentMapper.findAllByArticleId(articleId);
         return countTotalComments(comments);
     }
 
-	private List<Comment> buildCommentHierarchy(List<Comment> comments) {
-		return comments.stream()
-			.filter((comment) -> comment.getParentId() == null)
-			.map((comment) -> {
-				comment.updateReplies(findReplies(comment, comments));
-				return comment;
+	private List<CommentFindDTO> buildCommentHierarchy(List<CommentFindDTO> commentFindDTOs) {
+		return commentFindDTOs.stream()
+			.filter((commentFindDTO) -> commentFindDTO.getParentId() == null)
+			.map((commentFindDTO) -> {
+				commentFindDTO.setReplies(findReplies(commentFindDTO, commentFindDTOs));
+				return commentFindDTO;
 			})
 			.collect(Collectors.toList());
 	}
 
-	private List<Comment> findReplies(Comment parentComment, List<Comment> comments) {
-		return comments.stream()
-			.filter((comment) -> parentComment.getCommentId().equals(comment.getParentId()))
-			.map((comment) -> {
-				comment.updateReplies(findReplies(comment, comments));
-				return comment;
+	private List<CommentFindDTO> findReplies(CommentFindDTO parentComment, List<CommentFindDTO> commentFindDTOs) {
+		return commentFindDTOs.stream()
+			.filter((commentFindDTO) -> parentComment.getCommentId().equals(commentFindDTO.getParentId()))
+			.map((commentFindDTO) -> {
+				commentFindDTO.setReplies(findReplies(commentFindDTO, commentFindDTOs));
+				commentFindDTO = getNickname(commentFindDTO);
+				return commentFindDTO;
 			})
 			.collect(Collectors.toList());
 	}
@@ -110,4 +120,11 @@ public class CommentServiceImpl implements CommentService {
         }
         return count;
     }
+
+	private CommentFindDTO getNickname(CommentFindDTO commentFindDTO) {
+		Member member = memberRepository.findById(commentFindDTO.getAuthorId()).orElse(null);
+		String nickname = (member != null) ? member.getNickname() : "Unknown";
+		commentFindDTO.setNickname(nickname);
+		return commentFindDTO;
+	}
 }

@@ -21,6 +21,7 @@ public class Comment implements Likeable {
 	private Long articleId;
 	private String content;
 	private LocalDateTime createdAt;
+	private boolean isDeleted;
 	private List<Comment> replies;
 
 	public void updateReplies(List<Comment> replies) {

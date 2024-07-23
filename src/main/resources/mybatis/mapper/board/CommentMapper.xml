@@ -27,7 +27,8 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			CREATED_AT AS createdAt
+			CREATED_AT AS createdAt,
+			IS_DELETED AS isDeleted
 		FROM
 			COMMENT
 		ORDER BY
@@ -41,7 +42,8 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			CREATED_AT AS createdAt
+			CREATED_AT AS createdAt,
+			IS_DELETED AS isDeleted
 		FROM
 			COMMENT
 		WHERE
@@ -57,7 +59,8 @@
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			CREATED_AT AS createdAt
+			CREATED_AT AS createdAt,
+			IS_DELETED AS isDeleted
 		FROM
 			COMMENT
 		WHERE
@@ -67,10 +70,12 @@
 	<select id="findLatest" resultType="com.kmaengggong.kmaengggong.board.domain.Comment">
 		SELECT
 			COMMENT_ID AS commentId,
+			PARENT_ID AS parentId,
 			AUTHOR_ID AS authorId,
 			ARTICLE_ID AS articleId,
 			CONTENT AS content,
-			CREATED_AT AS createdAt
+			CREATED_AT AS createdAt,
+			IS_DELETED AS isDeleted
 		FROM
 			COMMENT
 		ORDER BY
@@ -87,21 +92,21 @@
 			COMMENT_ID = #{comment.commentId}
 	</update>
 	
-	<!-- <update id="delete">
+	<update id="deleteById">
 		UPDATE
 			COMMENT
 		SET
-			IS_DELETED = b'1'
+			IS_DELETED = B'1'
 		WHERE
 			COMMENT_ID = #{commentId}
-	</update> -->
+	</update>
 	
-	<delete id="deleteById">
+	<!-- <delete id="deleteById">
 		DELETE
 		FROM
 			COMMENT
 		WHERE
 			COMMENT_ID = #{commentId}
-	</delete>
+	</delete> -->
 </mapper>
 	

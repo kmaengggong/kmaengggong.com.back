@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,7 +19,6 @@ import com.kmaengggong.kmaengggong.board.domain.Article;
 import com.kmaengggong.kmaengggong.board.domain.ArticleRepository;
 import com.kmaengggong.kmaengggong.board.domain.Category;
 import com.kmaengggong.kmaengggong.board.domain.CategoryRepository;
-import com.kmaengggong.kmaengggong.board.domain.CommentMapper;
 import com.kmaengggong.kmaengggong.common.exception.ResourceNotFoundException;
 import com.kmaengggong.kmaengggong.member.domain.Member;
 import com.kmaengggong.kmaengggong.member.domain.MemberRepository;
@@ -37,7 +35,6 @@ public class ArticleServiceImpl implements ArticleService {
 	private final ArticleRepository articleRepository;
 	private final MemberRepository memberRepository;
 	private final CategoryRepository categoryRepository;
-	private final CommentMapper commentMapper;
 
 	@Override
 	@Transactional
@@ -52,9 +49,7 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<ArticleFindDTO> findAll() {
 		List<Article> articles = articleRepository.findAll();
 		return articles.stream()
-			.map((article) -> {
-				return getNicknameAndCategoryName(article);
-			})
+			.map((article) -> getNicknameAndCategoryName(article))
 			.collect(Collectors.toList());
 	}
 
@@ -67,9 +62,7 @@ public class ArticleServiceImpl implements ArticleService {
 			Sort.by(Sort.Direction.DESC, "createdAt")
 		));
 		Page<ArticleFindDTO> articleFindDTOs = articlePage
-			.map((article) -> {
-				return getNicknameAndCategoryName(article);
-		});
+			.map((article) -> getNicknameAndCategoryName(article));
 
 		return articleFindDTOs;
 	}
@@ -83,9 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
 			pageable.getSort()
 		));
 		Page<ArticleFindDTO> articleFindDTOs = articlePage
-			.map((article) -> {
-				return getNicknameAndCategoryName(article);
-		});
+			.map((article) -> getNicknameAndCategoryName(article));
 
 		return articleFindDTOs;
 	}
