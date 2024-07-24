@@ -82,7 +82,7 @@ public class CommentController extends CommonController {
     public ResponseEntity<Void> likeComment(@PathVariable("commentId") Long commentId,
         @RequestHeader(value = "Member-Id", required = false) Long memberId,
         HttpServletRequest request) {
-
+        System.out.println(memberId);
         if(memberId == null) memberId = generateGuestId(request);
         CommentFindDTO commentFindDTO = commentService.findById(commentId);
         Comment comment = Comment.builder()

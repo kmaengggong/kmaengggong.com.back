@@ -12,6 +12,8 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -180,16 +182,24 @@ public class BoardController extends CommonController {
 	}
 
 	@PostMapping("/{articleId}/like")
-	public ResponseEntity<Void> likeArticle(@PathVariable("articleId") Long articleId,
-		@RequestHeader(value = "Member-Id", required = false) Long memberId,
-		HttpServletRequest request) {
-
-		if(memberId == null) memberId = generateGuestId(request);
+	public ResponseEntity<Void> likeArticle(@PathVariable("articleId") Long articleId, HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object authenticationDetails = authentication.getDetails();
+		System.out.println(authenticationDetails);
+		System.out.println(authenticationDetails.toString());
+		authentication.getAuthorities().stream()
+			.map(a -> {
+				System.out.println(a);
+				System.out.println(a.toString());
+				return a.toString();
+			})
+			.toList();
+		// if(memberId == null) memberId = generateGuestId(request);
 		ArticleFindDTO articleFindDTO = articleService.findById(articleId);
 		Article article = Article.builder()
 			.articleId(articleFindDTO.getArticleId())
 			.build();
-		likeService.like(article, memberId);
+		// likeService.like(article, memberId);
 		return ResponseEntity.ok().build();
 	}
 

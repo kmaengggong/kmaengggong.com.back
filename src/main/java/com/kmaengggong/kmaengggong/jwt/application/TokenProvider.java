@@ -71,10 +71,10 @@ public class TokenProvider {
 		try {
 			Claims claims = getClaims(token);
 			String role = memberRepository.findByEmail(claims.getSubject())
-					.get().getRole().toString();
+				.get().getRole().toString();
 			
 			
-			if(role.equals("ADMIN")) {
+			if(role.equals("ROLE_ADMIN")) {
 				authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
 				System.out.println("TokenProvider: ROLE_ADMIN");
 			}
